@@ -75,7 +75,7 @@ admin.add_view(ModelView(User, db.session))
 # admin.add_view(ModelView(Student, db.session))
 # admin.add_view(ModelView(Courses, db.session))
 # admin.add_view(ModelView(Enrollment, db.session))
-admin.add_link(MenuLink(name='logout', category='', url="/"))
+# admin.add_link(MenuLink(name='logout', category='', url="/"))
 
 
 @login_manager.user_loader 
@@ -87,7 +87,8 @@ def load_user(user_id):
 
 @app.route('/', methods = ['GET'])
 def startPage():
-   
+    db.create_all()
+
     return render_template('login.html')
 
 

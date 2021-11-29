@@ -1,2 +1,4 @@
 .venv
-launch.json
+.vscode
+.DS_Store
+app.cpython-39.pyc

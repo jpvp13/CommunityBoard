@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Community Board</title>
+</head>
+<body>
+    <div class = "grid">
+        <div>
+            <header>
+               <h1>Community Board</h1>
+            </header>
+        </div>
+        <div>
+           <section>
+               <form action="/signup" method="POST" enctype="application/x-www-form-urlencoded">
+            <fieldset>
+                <legend>Login</legend>
+                <div>
+                    <label class="label">Username</label>
+
+                </div>
+                <div>
+                    <input class="username-input" name="username" id="username">
+                </div>
+
+                <div class="label">
+                    <label>Password</label>
+                </div>
+                <div>
+                    <input type="password" name="pass" class="pass-input" required>
+                </div>
+                <div>
+                    <label class="label">First Name</label>
+
+                </div>
+                <div>
+                    <input class="firstName-input" name="firstName" id="firstName">
+                </div>
+
+                <div class="label">
+                    <label>Last Name</label>
+                </div>
+                <div>
+                    <input class="lastName" name="lastName" required>
+                </div>
+                <div class="label">
+                    <label>Bio</label>
+                </div>
+                <div>
+                    <input class="bio" name="bio" required>
+                </div>
+                
+                <div>
+                    <button type="submit"> Log in</button>
+                </div>
+                <div class="error"></div>
+            </fieldset>
+        </form>
+           </section>
+        </div>
+    </div>
+</body>
+</html>

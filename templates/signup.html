@@ -15,7 +15,22 @@
            <section>
                <form action="/signup" method="POST" enctype="application/x-www-form-urlencoded">
             <fieldset>
-                <legend>Login</legend>
+                <p>
+                    {% for row in Error %}
+                        {{row}}
+                    {% endfor %}
+                </p>
+                
+                
+                <legend>Sign-Up</legend>
+                <div>
+                    <label class="label">Email</label>
+
+                </div>
+                <div>
+                    <input class="email-input" name="email" id="email">
+                </div>
+
                 <div>
                     <label class="label">Username</label>
 
@@ -44,12 +59,12 @@
                 <div>
                     <input class="lastName" name="lastName" required>
                 </div>
-                <div class="label">
+                <!-- <div class="label">
                     <label>Bio</label>
                 </div>
                 <div>
                     <input class="bio" name="bio" required>
-                </div>
+                </div> -->
                 
                 <div>
                     <button type="submit"> Log in</button>

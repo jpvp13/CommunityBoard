@@ -3,6 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <title>Community Board</title>
+    <script src="templates/static/login.js"></script>
+
 </head>
 <body>
     <div class = "grid">
@@ -13,29 +15,29 @@
         </div>
         <div>
            <section>
-               <form action="/login" method="POST" enctype="application/x-www-form-urlencoded">
-            <fieldset>
-                <legend>Login</legend>
-                <div>
-                    <label class="label">Username</label>
-
-                </div>
-                <div>
-                    <input class="username-input" name="username" id="username">
-                </div>
-
-                <div class="label">
-                    <label>Password</label>
-                </div>
-                <div>
-                    <input type="password" name="pass" class="pass-input" required>
-                </div>
-                <div>
-                    <button type="submit">Log in</button>
-                </div>
-                <div class="error"></div>
-            </fieldset>
-        </form>
+            <form action="/login" method="POST" enctype="application/x-www-form-urlencoded">
+                <fieldset>
+                    <legend>Login</legend>
+                    <div>
+                        <label class="label">Username</label>
+    
+                    </div>
+                    <div>
+                        <input class="username-input" name="username" id="username">
+                    </div>
+    
+                    <div class="label">
+                        <label>Password</label>
+                    </div>
+                    <div>
+                        <input type="password" name="pass" class="pass-input" required>
+                    </div>
+                    <div>
+                        <button type="submit" onclick = "login()" >Log in</button>
+                    </div>
+                    <div class="error"></div>
+                </fieldset>
+            </form>
            </section>
         </div>
     </div>

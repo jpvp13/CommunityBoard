@@ -21,37 +21,37 @@ function input_password() {
 }
 
 
-function login() {
-    xhttp = new XMLHttpRequest();
+// function login() {
+//     xhttp = new XMLHttpRequest();
 
-    // username = document.getElementById('username').value
-    // password = document.getElementById('password').value
+//     // username = document.getElementById('username').value
+//     // password = document.getElementById('password').value
 
-    localStorage.setItem("username", input_username());
+//     localStorage.setItem("username", input_username());
     
-    xhttp.open("POST", "/login", true);
-    body = { "username": input_username(), "password": input_password() };
-    // xhttp.send(body)
-    xhttp.setRequestHeader('Content-Type', 'application/json');
-    // console.log(JSON.stringify(body))
-    // console.log(body)
-    // xhttp.send(body)
-    xhttp.send(JSON.stringify(body))
+//     xhttp.open("/test", "POST", true);
+//     body = { "username": input_username(), "password": input_password() };
+//     // xhttp.send(body)
+//     xhttp.setRequestHeader('Content-Type', 'application/json');
+//     // console.log(JSON.stringify(body))
+//     // console.log(body)
+//     // xhttp.send(body)
+//     xhttp.send(JSON.stringify(body))
 
 
-    xhttp.onload = function () {
-        try{
-            const myObj = this.responseText;
-            console.log(myObj)
-        } catch (err){
-            const myObj = this.responseText;
+//     xhttp.onload = function () {
+//         try{
+//             const myObj = this.responseText;
+//             console.log(myObj)
+//         } catch (err){
+//             const myObj = this.responseText;
 
-            const display = document.getElementById('errorDisplay');
-            display.innerHTML = myObj;
-        }
-    }
+//             const display = document.getElementById('errorDisplay');
+//             display.innerHTML = myObj;
+//         }
+//     }
 
-}
+// }
 
 
 function testJS() {

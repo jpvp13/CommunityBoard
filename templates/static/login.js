@@ -21,7 +21,7 @@ function input_password() {
 }
 
 
-// function login() {
+// function loginPage() {
 //     xhttp = new XMLHttpRequest();
 
 //     // username = document.getElementById('username').value
@@ -29,7 +29,7 @@ function input_password() {
 
 //     localStorage.setItem("username", input_username());
     
-//     xhttp.open("/test", "POST", true);
+//     xhttp.open("/loginPage", "POST", true);
 //     body = { "username": input_username(), "password": input_password() };
 //     // xhttp.send(body)
 //     xhttp.setRequestHeader('Content-Type', 'application/json');

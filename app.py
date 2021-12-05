@@ -1,11 +1,13 @@
-import re
+from re import X
 from typing import Text
 from flask import Flask, redirect, url_for, request,render_template, json, flash, g
 from flask_admin import Admin
 from flask_admin.menu import MenuLink
+import flask_login
 from flask_login.utils import login_required, logout_user
-import flask_security
-from flask_security.utils import hash_password, verify_hash
+from flask_security.datastore import UserDatastore
+from flask_security.forms import Email
+from flask_security.utils import encrypt_password, hash_password, verify_hash
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.engine import url,create_engine
 from sqlalchemy.orm import session, sessionmaker, relationship
@@ -20,39 +22,122 @@ from flask_security import Security, SQLAlchemyUserDatastore,  SQLAlchemySession
 import gc
 from flask_admin import helpers as admin_helpers
 # import hashlib import pbkdf2_sha512
-from passlib.hash import sha256_crypt
+# from passlib.hash import sha256_crypt
+from flask_bcrypt import Bcrypt
 
-from database import db_session, init_db, sessionmaker
-from models import User, Role
+from flask_security.utils import verify_password
+from database import Base
+from flask_security import UserMixin, RoleMixin
+from sqlalchemy import create_engine
+from sqlalchemy.orm import relationship, backref
+from sqlalchemy import Boolean, DateTime, Column, Integer, String, ForeignKey
+from flask_login import current_user, login_user,login_manager, LoginManager
+from sqlalchemy import create_engine
+from sqlalchemy.orm import scoped_session, sessionmaker
+from sqlalchemy.ext.declarative import declarative_base
 
-userTable = User
 
 app = Flask(__name__, static_url_path='', static_folder='')
 app.config['DEBUG'] = True
-app.config['SECRET_KEY'] = '\xfd{H\xe5<\x95\xf9\xe3\x96.5\xd1\x01O<!\xd5\xa2\xa0\x9fR"\xa1\xa8'
-app.config['SECURITY_PASSWORD_SALT'] = '\xfd{H\xe5<\x95\xf9\xe3\x96.'
-# app.config['SECURITY_PASSWORD_HASH'] = 'pbkdf2_sha512'  
+app.config['SECRET_KEY'] = '\xfd{H\xe5<'
+app.config['SECURITY_PASSWORD_SALT'] = '.5\xd1\x01O<!\xd5\xa2\xa0\x9fR'
+app.config['SECURITY_PASSWORD_HASH'] = 'pbkdf2_sha512'  
 # app.config['SECURITY_LOGIN_URL'] = '/login'
 # app.config['SECURITY_POST_LOGIN_VIEW'] = '/lobby'
 # app.config['SECURITY_LOGIN_USER_TEMPLATE'] = 'security/login.html'  #overriding flask-securitys default login page
 
 
+
 app.config ['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///app.db'
+engine = create_engine('sqlite:///app.db', echo = True)
 # engine = create_engine('sqlite:///app.db', echo = True)
 
 
-app.config['FLASK_ADMIN_SWATCH'] = 'cerulean'
+# app.config['FLASK_ADMIN_SWATCH'] = 'cerulean'
+app.config['FLASK_ADMIN_SWATCH'] = 'sandstone'
 
 admin = Admin(app, name='Course Information', template_mode='bootstrap3')
 
-login_manager = LoginManager() 
+login_manager = LoginManager(app) 
 login_manager.init_app(app) 
-login_manager.login_view = '/'
+login_manager.login_view = 'login'
 
 db = SQLAlchemy(app)
 
-# Session = sessionmaker(app)
-# session = Session()
+bcrypt = Bcrypt(app)
+
+Session = sessionmaker(app)
+session = Session()
+
+db_session = scoped_session(sessionmaker(autocommit=False,autoflush=False, bind=engine))
+Base = declarative_base()
+Base.query = db_session.query_property()
+
+# class RolesUsers(Base):
+class RolesUsers(db.Model):
+    __tablename__ = 'roles_users'
+    id = Column(Integer(), primary_key=True)
+    user_id = Column('user_id', db.Integer(), ForeignKey('user.id'))
+    role_id = Column('role_id', db.Integer(), ForeignKey('role.id'))
+
+# class Role(RoleMixin, Base):
+class Role(db.Model, RoleMixin):
+    __tablename__ = 'role'
+    id = Column(db.Integer(), primary_key=True)
+    name = Column(db.String(80), unique=True)
+    description = Column(db.String(255))
+    
+    
+# class User( UserMixin, Base):
+class User(db.Model, UserMixin):
+    __tablename__ = 'user'
+    id = Column(db.Integer, primary_key=True)
+    email = Column(db.String(255), unique=True)
+    username = Column(db.String(255), unique = True)
+    password = Column(db.String)  #no size specified
+    firstName = Column(db.String(255))
+    lastName = Column(db.String(255))
+    last_login_at = Column(DateTime())
+    current_login_at = Column(DateTime())
+    last_login_ip = Column(db.String(100))
+    current_login_ip = Column(db.String(100))
+    login_count = Column(db.Integer())
+    active = Column(db.Boolean())
+    confirmed_at = Column(DateTime())
+    roles = relationship('Role', secondary='roles_users', backref=backref('users', lazy='dynamic'))
+    
+    
+   
+    # def __init__ (self, id, email, username, password, firstName, lastName, last_login_at, current_login_at,last_login_ip,current_login_ip,login_count,active,confirmed_at,roles):
+    #     self.id = id
+    #     self.email = email
+    #     self.username = username
+    #     self.password = password
+    #     self.firstName = firstName
+    #     self.lastName = lastName
+    #     self.last_login_at = last_login_at
+    #     self.current_login_at = current_login_at
+    #     self.last_login_ip = last_login_ip
+    #     self.current_login_ip = current_login_ip
+    #     self.login_count = login_count
+    #     self.active = active
+    #     self.confirmed_at = confirmed_at
+    #     self.roles = roles
+    
+    # def is_authenticated(self):
+    #     return True
+
+    # def is_active(self):
+    #     return True
+
+    # def is_anonymous(self):
+    #     return False
+
+    # def get_id(self):
+    #     return (self.id)
+
+    # def __repr__(self):
+    #     return '<User %r>' %(self.firstName)
 
 class CustomLoginForm(LoginForm):
     def validate(self):
@@ -64,6 +149,8 @@ user_datastore = SQLAlchemySessionUserDatastore(db_session,User, Role)
 security = Security(app, user_datastore, login_form = CustomLoginForm)
 
 admin.add_view(ModelView(User, db_session))
+admin.add_view(ModelView(RolesUsers, db_session))
+admin.add_view(ModelView(Role, db_session))
 admin.add_link(MenuLink(name='logout', category='', url="/"))
 
 
@@ -79,61 +166,67 @@ def security_context_processor():
 
 # @app.before_first_request
 # def create_user():
-#     init_db()
-#     user_datastore.create_user(email='test', firstName = 'John', lastName = 'Villalvazo', password= '11')
+#     db.create_all()
+#     # init_db()
+#     # db.add(email='test', username = 'm', firstName = 'John', lastName = 'Villalvazo', password= '11')
+#     user_datastore.create_user(email='test', username = 'a', firstName = 'John', lastName = 'Villalvazo', password= 'a')
+#     # db.session.add_all(email='test', username = 'm', firstName = 'John', lastName = 'Villalvazo', password= '11')
 #     db_session.commit()
+#     db_session.close()
+#     # db.commit()
 
 
 
 
 
-
-# def is_authenticated():
-#     return True
-#     # return None
-
-# def is_active():   
-#     return True           
-
-# def is_anonymous():
-#     return False          
-
-# def get_id(user_id):         
-#     return str(user_id)
-
-
-
-# @app.before_request
-# def before_request():
-#     g.user = current_user
-
-
+#! code starts here so user can select what they want to do
 @app.route('/')
-# @login_required
 def startPage():
     print("starting place")
-    
+    # db.create_all()
     return render_template('welcomePage.html')
 
+#! This portion will alow for a user to log out, only works if they have signed in
+@app.route('/logout')
+@login_required
+def logout():
+    logout_user()
+    print("you have been logged out")
+    return redirect(url_for('/'))
 
+
+#! this code block will display the apporpriate html page based on users choice within welcomePage.html
 @app.route('/path', methods = ['POST', 'GET'])
 def path():
     if request.method == 'GET':
-    # return 'hello'
+
         return render_template('login.html')
 
     elif request.method == 'POST':
         return render_template('signup.html')
     
 
-    
-@app.route('/login', methods = ['POST'])
+#! this is where a users info will go when logging in. The code will first check to see if the user
+#! is already authenticated (aka if you refresh the page and come back it should just let the person to continue
+#! were they were).
+#! The if not authenticated, it will get their info, hash their password and compare it to whats in our db,
+#! as well as checking to see if the user with their UNIQUE username also appear in our db
+
+#! If these both return True, then code "login_user(user)" will run, and will assign user a token that will let them
+#! go in and out of our apps protected pages (again it SHOULD... after 23 hours i'm fried and not sure lol), if either dont
+#! match, then a error pops up saying "incorrect credentials" which we should change in future iteration
+
+#! else if none of these checks are met, it will just return user to the login page
+@app.route('/login', methods = [ 'POST'])
 def loginPage():
     
     # return "im confused"
     
     if current_user.is_authenticated:
-        return render_template('signup.html')
+        print("im already authorized!")
+        # return render_template('whiteboard1.html')
+        return redirect(url_for('lobby'))
+
     
     # print("I am confused")
     if request.method == 'POST':
@@ -141,44 +234,60 @@ def loginPage():
         USERNAME = request.form.get('username')
         PASSWORD = request.form.get('pass')
         
+        # test= User.query.filter_by(username = USERNAME).first() 
+
         
-        hashedPassword = sha256_crypt.encrypt(PASSWORD)
-        print(hashedPassword)
+        # hashedPassword = hash_password(PASSWORD)
+        # hashedPassword = encrypt_password(PASSWORD)
+        hashedPassword = generate_password_hash(PASSWORD)
+
+        # print("#########################################################")
+        # print("Hashed Password")
+        # print(hashedPassword)
         
+        # checkedPassword = bcrypt.check_password_hash(hashedPassword, PASSWORD)
+        checkedPassword = check_password_hash(hashedPassword, PASSWORD)
+
+        # print("#########################################################")
+        # print("Equal?")
+        # print(test.password)
+        # print(PASSWORD)
+        # print(test.password == PASSWORD)
+
+        # print("#########################################################")
+        # print("Checked Password")
+        print(checkedPassword)
         
-        user = userTable.query.filter_by(username = USERNAME, password = hashedPassword).first() 
-        
-        checkedPassword = sha256_crypt.verify(PASSWORD, hashedPassword)
-        print("#####################  " + str(checkedPassword) + "\n")
+        user = User.query.filter_by(username = USERNAME).first() 
+
+
+        # print("#########################################################")
+        # print("###### What is this output? @@@@ ")
+        # print(user.id)
         
         # if str(User.password) == str(hashedPassword):
-        if checkedPassword == True:
-            init_db()
-            # user = user_datastore.
-            # user = db.User.filter_by(username = USERNAME, password = hashedPassword).first() 
-            # user = User.query.filter_by(username = USERNAME, password = hashedPassword).first() 
-            print("s##################################### User  " + str(user))
-
+        if user and checkedPassword == True:
+            
             login_user(user)
-            # return render_template('lobby.html')
-            return redirect(url_for('lobby'))
+            # return redirect(url_for('lobby'))     #!main place this will redirect to, but can be changed to different places
+            return redirect(url_for('testing'))
         else:
             return "<p> Incorrect credentials, please try again</p>"
             
         
-    # # gc.collection()
-    # # return render_template("login.html")
-    
-    return render_template("whiteboard1.html")
+    return redirect(url_for('login'))
 
-    # return render_template('login.html')
+#~ this code block is used to sign a user up to our app (aka adding their info to our db). This will take in any info we want, but
+#~ as a testing purpose i used the below. After this, the users entered password is hashed using werkzeug.security module which takes care of 
+#~ generating a hash and checking the hashed password. After hashing the password, it will query our db to check if this infromation has already
+#~ been entered into our app.
 
+#~if the user does NOT exisit already in our db, we go ahead and add them into our db with their entered info and newly hashed password. After commiting
+#~ addition into our db, we push them through to the lobby page (or anywhere else needed/wanted). If no checks are passed, then we just send them back to
+#~ the signup page. Once created a account with us and pushed into app, i assume we can use the "login_user(user)" feature of flask-login since they will need 
+#~ to navigate to pages once they create a account
 @app.route('/signup', methods = ['POST'])
 def signup():
-    
-    # form = RegistrationForm(request.form)
-    
-
     
     print("inside of signup")
     if request.method == 'POST':
@@ -190,8 +299,11 @@ def signup():
         FIRSTNAME = request.form.get('firstName')
         LASTNAME = request.form.get('lastName')
         
-        hashedPassword = sha256_crypt.encrypt(PASSWORD)
+        hashedPassword = generate_password_hash(PASSWORD)
         print(hashedPassword)
+        
+        # hashedPassword = hash_password(PASSWORD)
+        # print(hashedPassword)
                 
         user = User.query.filter_by(email = EMAIL, username = USERNAME, password = hashedPassword).first() 
 
@@ -203,43 +315,44 @@ def signup():
         #         return ('<p>The entered username already exsist</p>')
         # elif User.email == EMAIL:
         #     return ('<p>The entered email already exsist</p>')
+        #!
+        
         if not user: #checks to see if user is not unique
-            init_db()
-            user_datastore.create_user(email=EMAIL, username = USERNAME, firstName = FIRSTNAME, lastName = LASTNAME, password= hashedPassword)
+            # init_db()
+            user_datastore.create_user(email=EMAIL, username = USERNAME, firstName = FIRSTNAME, lastName = LASTNAME, password= hashedPassword, )
             db_session.commit()
             db_session.close()
             # gc.collect()
             
-            # login_user(user)
-            return render_template('lobby.html')
-            # return redirect(url_for('lobby')) #!this doesnt like to work?
+            login_user(user)    #! discuss with team, confirm if this is correct
+            return redirect(url_for('lobby'))
             
-        
-
-    print("outside of everything")
-
-    # return "im outside now"
-    
     return render_template('signup.html')
 
 
-
+#? This code here is meant to be used when the user has logged in or created a new account and is allowed to begin
+#? using our app. This can drop the user anywhere we want, created a dummy route for now
 @app.route('/lobby')
 @login_required
 def lobby():
     return render_template('lobby.html')
 
+#* this code is similar to the '/lobby' route, but was just meant to test to make sure a user was authenticated
+@app.route('/testiing')
+@login_required
+def testing():
+    return "Hi just testing this!"
+    # return render_template('lobby.html')
 
-
-
+#& required code to help flask-login work
 @login_manager.user_loader 
 def load_user(user_id): 
-    try:
-        return User.query.get(user_id)
-    except:
-        return None
+    return User.query.get(user_id)
     
-    
+#^ this code is meant to allow for a unauthorized user... not user if properly working at this moment
+@login_manager.unauthorized_handler
+def unauthorized_handler():
+    return 'Unauthorized'
 
 if __name__ == '__main__':
     app.run()

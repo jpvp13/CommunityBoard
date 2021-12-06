@@ -1,6 +1,7 @@
 from re import X
 from typing import Text
 from flask import Flask, redirect, url_for, request,render_template, json, flash, g
+from flask.globals import current_app
 from flask_admin import Admin, AdminIndexView, expose
 from flask_admin.menu import MenuLink
 from flask_login.utils import login_required, logout_user
@@ -229,10 +230,7 @@ def loginPage():
     
     # return "im confused"
     
-    # if current_user.is_authenticated:
-    #     print("im already authorized!")
-    #     return render_template('whiteboard1.html')
-        # return redirect(url_for('lobby'))
+    
 
 
     if request.method == 'PUT':
@@ -243,6 +241,8 @@ def loginPage():
     # elif request.method == 'GET':
 
     elif request.method == 'POST':
+        
+        
         # EMAIL = request.form.get('email')
         USERNAME = request.form.get('username')
         PASSWORD = request.form.get('pass')
@@ -276,7 +276,7 @@ def loginPage():
 
         # print("#########################################################")
         # print("###### What is this output? @@@@ ")
-        print(user.username)
+        print("The current user is: " + user.username)
         
         # if str(User.password) == str(hashedPassword):
         if user.username == 'admin' and checkedPassword == True:
@@ -284,6 +284,17 @@ def loginPage():
             # return redirect(url_for('admin.index'))
         
         elif user and checkedPassword == True:
+            
+            if current_user.is_authenticated:
+                print("im already authorized!")
+                
+                print("This is the cirrent user: " + current_user)
+                print(current_user.is_authenticated)
+                return render_template('whiteboard1.html')
+            
+            print("###############################################")
+            print("The user who is currently logged in")
+            print(current_user)
             
             login_user(user)
             # return redirect(url_for('lobby'))     #!main place this will redirect to, but can be changed to different places

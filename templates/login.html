@@ -3,46 +3,42 @@
 <head>
     <meta charset="UTF-8">
     <title>Community Board</title>
-    <script src="templates/static/login.js"></script>
+
+    <link href="static/style.css" rel="stylesheet" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Readex+Pro&display=swap" rel="stylesheet"> 
 
 </head>
-<body>
-    <div class = "grid">
-        <div>
-            <header>
-               <h1>Community Board</h1>
+<body class="login-body">
+    <div class = "home-grid">
+        <div class = "home-login-title">
+            <header class="login-header">
+               <h1>Community <br> Board</h1>
             </header>
         </div>
         <div>
-           <section>
-            <form action="/login" method="POST">
-
-            <!-- <form action="/login" method="POST" enctype="application/x-www-form-urlencoded">
-                <fieldset>
-                    <legend>Login</legend>
-                    <div>
-                        <label class="label">Username</label>
-    
-                    </div>
-                    <div>
-                        <input class="username-input" name="username" id="username">
-                    </div>
-    
-                    <div class="label">
-                        <label>Password</label>
-                    </div>
-                    <div>
-                        <input type="password" name="pass" class="pass-input" required>
-                    </div>
-                    <div>
-                        <button type="submit" >Log in </button>
-                    </div>
-                    <div class="error"></div>
-                </fieldset>
-            </form>
-           </section>
+               <form class="login-form" action="/login" method="POST" enctype="application/x-www-form-urlencoded">
+                    <fieldset>
+                        <div class="login-legend">Login</div>
+                            <label class="label">Username</label>
+                            <input class="username-input input" name="username" id="username">
+                            <label class="label">Password</label>
+                            <input type="password" name="pass" class="pass-input input" required>
+                            <div class="grid-login-signup">
+                                <div class="login-grid-1">
+                                <button  class="login-button" type="submit" onclick="login()">Log in</button>
+                                </div>
+                                <div class="login-grid-2">
+                                    or <button class="signup-button" type="submit" onclick="signUp()">Sign Up</button>
+                                </div>
+                            </div>
+                        <div class="error"></div>
+                    </fieldset>
+                </form>
         </div>
     </div>
+    <script src="templates/static/login.js"></script>
 </body>
 </html> -->
 

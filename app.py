@@ -38,7 +38,9 @@ from sqlalchemy.ext.declarative import declarative_base
 app = Flask(__name__, static_url_path='', static_folder='')
 app.config['DEBUG'] = True
 app.config['SECRET_KEY'] = '\xfd{H\xe5<'
-app.config['SECURITY_PASSWORD_SALT'] = '.5\xd1\x01O<!\xd5\xa2\xa0\x9fR'
+# app.config['SECURITY_PASSWORD_SALT'] = '.5\xd1\x01O<!\xd5\xa2\xa0\x9fR'
+app.config['SECURITY_PASSWORD_SALT'] = 'john'
+
 app.config['SECURITY_PASSWORD_HASH'] = 'pbkdf2_sha512'  
 # app.config['SECURITY_LOGIN_URL'] = '/login'
 # app.config['SECURITY_POST_LOGIN_VIEW'] = '/lobby'

@@ -18,7 +18,6 @@ from werkzeug.security import generate_password_hash, check_password_hash
 # from wtforms import Form, BooleanField, StringField, PasswordField, validators
 # from sqlalchemy.sql import text
 from flask_security import Security, SQLAlchemyUserDatastore,  SQLAlchemySessionUserDatastore, UserMixin, RoleMixin, LoginForm, RegisterForm
-# import gc
 from flask_admin import helpers as admin_helpers
 # import hashlib import pbkdf2_sha512
 # from passlib.hash import sha256_crypt

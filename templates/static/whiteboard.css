@@ -1,0 +1,50 @@
+*{
+    font-family: 'Readex Pro', sans-serif;
+}
+
+
+.drawingPlace{
+    display:flex;
+    margin:15px;
+}
+
+.toolbar{
+    background-color: rgb(255, 255, 255);
+    overflow: hidden;
+    margin-top: 1%;
+}
+
+.toolbar a{
+  float: left;
+  color: #8b8888;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+  font-size: 17px;
+  }
+  
+ 
+  .toolbar a:hover {
+    color: #2b2b2b;
+  }
+  
+  .toolbar a.active {
+    color: #2b2b2b;
+  }
+
+  @media screen and (max-height: 450px) {
+    .toolbar {padding-top: 15px;}
+    .toolbar a {font-size: 18px;}
+  }
+
+.output{
+    font-size: 20px;
+    padding:10px;
+    margin-top:7px;
+    color: #2b2b2b;
+
+}
+
+.pointSize{
+    padding-top: 5px;
+}

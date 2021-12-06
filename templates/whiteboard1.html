@@ -2,13 +2,29 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Whiteboard</title>
+
+    <link href="static/whiteboard.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@2.5.0/fonts/remixicon.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Readex+Pro&display=swap" rel="stylesheet"> 
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@2.5.0/fonts/remixicon.css">
+
 </head>
 <body>
-    <div class="menu"></div>
-    <div class="whiteboard">
-        <p>Inside whiteboard1</p>
-    </div>
-
+    
+        <div id="drawingToolbar" class="toolbar">
+            <a ><i class="ri-pencil-line ri-2x"></i></a>
+            <a ><i class="ri-eraser-line ri-2x"></i></a>
+            <a ><input class="colorPicker" type="color" value="#ff0000"></a>
+            <a ><input class="pointSize" type="range" min="2" max="50" value="30" ></a>
+            <div class="output">30</div>
+        </div>
+        <div class="drawingPlace">
+            <canvas class="canvas"></canvas>
+        </div>
+    
+    <script type="text/javascript" src="templates/static/drawing.js"></script>
 </body>
 </html>

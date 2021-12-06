@@ -1,9 +1,8 @@
 from re import X
 from typing import Text
 from flask import Flask, redirect, url_for, request,render_template, json, flash, g
-from flask_admin import Admin
+from flask_admin import Admin, AdminIndexView, expose
 from flask_admin.menu import MenuLink
-import flask_login
 from flask_login.utils import login_required, logout_user
 from flask_security.datastore import UserDatastore
 from flask_security.forms import Email
@@ -25,8 +24,11 @@ from flask_admin import helpers as admin_helpers
 # from passlib.hash import sha256_crypt
 from flask_bcrypt import Bcrypt
 
+# from admin import AdminView     #created python file
+
+
 from flask_security.utils import verify_password
-from database import Base
+# from database import Base
 from flask_security import UserMixin, RoleMixin
 from sqlalchemy import create_engine
 from sqlalchemy.orm import relationship, backref
@@ -56,7 +58,6 @@ engine = create_engine('sqlite:///app.db', echo = True)
 # app.config['FLASK_ADMIN_SWATCH'] = 'cerulean'
 app.config['FLASK_ADMIN_SWATCH'] = 'sandstone'
 
-admin = Admin(app, name='Course Information', template_mode='bootstrap3')
 
 login_manager = LoginManager(app) 
 login_manager.init_app(app) 
@@ -72,6 +73,10 @@ session = Session()
 db_session = scoped_session(sessionmaker(autocommit=False,autoflush=False, bind=engine))
 Base = declarative_base()
 Base.query = db_session.query_property()
+
+
+
+
 
 # class RolesUsers(Base):
 class RolesUsers(db.Model):
@@ -108,36 +113,20 @@ class User(db.Model, UserMixin):
     
     
    
-    # def __init__ (self, id, email, username, password, firstName, lastName, last_login_at, current_login_at,last_login_ip,current_login_ip,login_count,active,confirmed_at,roles):
-    #     self.id = id
-    #     self.email = email
-    #     self.username = username
-    #     self.password = password
-    #     self.firstName = firstName
-    #     self.lastName = lastName
-    #     self.last_login_at = last_login_at
-    #     self.current_login_at = current_login_at
-    #     self.last_login_ip = last_login_ip
-    #     self.current_login_ip = current_login_ip
-    #     self.login_count = login_count
-    #     self.active = active
-    #     self.confirmed_at = confirmed_at
-    #     self.roles = roles
-    
-    # def is_authenticated(self):
-    #     return True
+class AdminView(ModelView):
 
-    # def is_active(self):
-    #     return True
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.static_folder = 'static'
 
-    # def is_anonymous(self):
-    #     return False
+    def is_accessible(self):
+        return current_user.is_authenticated
+        # print (session.get('username'))
+        # return session.get('username') == 'admin'
 
-    # def get_id(self):
-    #     return (self.id)
-
-    # def __repr__(self):
-    #     return '<User %r>' %(self.firstName)
+    def inaccessible_callback(self, name, **kwargs):
+        # redirect to login page if user doesn't have access
+        return redirect(url_for('startPage', next=request.url))
 
 class CustomLoginForm(LoginForm):
     def validate(self):
@@ -148,10 +137,16 @@ class CustomLoginForm(LoginForm):
 user_datastore = SQLAlchemySessionUserDatastore(db_session,User, Role)
 security = Security(app, user_datastore, login_form = CustomLoginForm)
 
-admin.add_view(ModelView(User, db_session))
-admin.add_view(ModelView(RolesUsers, db_session))
-admin.add_view(ModelView(Role, db_session))
-admin.add_link(MenuLink(name='logout', category='', url="/"))
+
+admin = Admin(app, name='Dashboard', template_mode='bootstrap3', index_view= AdminView(User, db.session, url = '/admin', endpoint = '/logout'))
+
+# admin.add_view(AdminView(User, db_session))
+admin.add_view(AdminView(RolesUsers, db_session))
+admin.add_view(AdminView(Role, db_session))
+# admin.add_view(ModelView(User, db_session))
+# admin.add_view(ModelView(RolesUsers, db_session))
+# admin.add_view(ModelView(Role, db_session))
+admin.add_link(MenuLink(name='logout', category='', url="/logout"))
 
 
 
@@ -185,24 +180,36 @@ def startPage():
     print("starting place")
     # db.create_all()
     return render_template('welcomePage.html')
+    # return render_template('login.html')
 
 #! This portion will alow for a user to log out, only works if they have signed in
 @app.route('/logout')
 @login_required
 def logout():
     logout_user()
+    
+    
+    
+    
     print("you have been logged out")
     return redirect(url_for('/'))
 
+@app.route('/adminView')
+@login_required
+def adminPage():
+    # return redirect(url_for('authenticatedAdmin.index'))
+    return redirect('/admin')
+
 
 #! this code block will display the apporpriate html page based on users choice within welcomePage.html
-@app.route('/path', methods = ['POST', 'GET'])
+@app.route('/path', methods = ['GET'])
 def path():
+    
+#     if request.method == 'GET':
+
+#         return render_template('welcomePage.html')
+
     if request.method == 'GET':
-
-        return render_template('login.html')
-
-    elif request.method == 'POST':
         return render_template('signup.html')
     
 
@@ -217,19 +224,25 @@ def path():
 #! match, then a error pops up saying "incorrect credentials" which we should change in future iteration
 
 #! else if none of these checks are met, it will just return user to the login page
-@app.route('/login', methods = [ 'POST'])
+@app.route('/login', methods = ['POST', 'PUT'])
 def loginPage():
     
     # return "im confused"
     
-    if current_user.is_authenticated:
-        print("im already authorized!")
-        # return render_template('whiteboard1.html')
-        return redirect(url_for('lobby'))
+    # if current_user.is_authenticated:
+    #     print("im already authorized!")
+    #     return render_template('whiteboard1.html')
+        # return redirect(url_for('lobby'))
 
-    
-    # print("I am confused")
-    if request.method == 'POST':
+
+    if request.method == 'PUT':
+        print('signup here')
+        return render_template('signup.html')
+        # return redirect(url_for('signup'))
+        
+    # elif request.method == 'GET':
+
+    elif request.method == 'POST':
         # EMAIL = request.form.get('email')
         USERNAME = request.form.get('username')
         PASSWORD = request.form.get('pass')
@@ -256,26 +269,31 @@ def loginPage():
 
         # print("#########################################################")
         # print("Checked Password")
-        print(checkedPassword)
+        # print(checkedPassword)
         
         user = User.query.filter_by(username = USERNAME).first() 
 
 
         # print("#########################################################")
         # print("###### What is this output? @@@@ ")
-        # print(user.id)
+        print(user.username)
         
         # if str(User.password) == str(hashedPassword):
-        if user and checkedPassword == True:
+        if user.username == 'admin' and checkedPassword == True:
+            return redirect('/admin')
+            # return redirect(url_for('admin.index'))
+        
+        elif user and checkedPassword == True:
             
             login_user(user)
             # return redirect(url_for('lobby'))     #!main place this will redirect to, but can be changed to different places
-            return redirect(url_for('testing'))
+            return render_template('whiteboard1.html')
         else:
             return "<p> Incorrect credentials, please try again</p>"
             
         
-    return redirect(url_for('login'))
+    # return redirect(url_for('login'))
+    return render_template('login.html')
 
 #~ this code block is used to sign a user up to our app (aka adding their info to our db). This will take in any info we want, but
 #~ as a testing purpose i used the below. After this, the users entered password is hashed using werkzeug.security module which takes care of 
@@ -307,7 +325,7 @@ def signup():
                 
         user = User.query.filter_by(email = EMAIL, username = USERNAME, password = hashedPassword).first() 
 
-        print("USERNAME " + User.username)
+        # print("USERNAME " + User.username)
         
         
         #! need to make this error more graceful
@@ -317,15 +335,20 @@ def signup():
         #     return ('<p>The entered email already exsist</p>')
         #!
         
-        if not user: #checks to see if user is not unique
+        if user: #checks to see if user is not unique
+            return "This username already exists. Please enter a different username"
+        else:
             # init_db()
             user_datastore.create_user(email=EMAIL, username = USERNAME, firstName = FIRSTNAME, lastName = LASTNAME, password= hashedPassword, )
             db_session.commit()
             db_session.close()
             # gc.collect()
             
-            login_user(user)    #! discuss with team, confirm if this is correct
-            return redirect(url_for('lobby'))
+            # login_user(user)    #! discuss with team, confirm if this is correct
+            # return redirect(url_for('lobby'))
+            return render_template("welcomePage.html")
+        
+            
             
     return render_template('signup.html')
 
@@ -338,7 +361,7 @@ def lobby():
     return render_template('lobby.html')
 
 #* this code is similar to the '/lobby' route, but was just meant to test to make sure a user was authenticated
-@app.route('/testiing')
+@app.route('/testing')
 @login_required
 def testing():
     return "Hi just testing this!"
@@ -352,7 +375,14 @@ def load_user(user_id):
 #^ this code is meant to allow for a unauthorized user... not user if properly working at this moment
 @login_manager.unauthorized_handler
 def unauthorized_handler():
-    return 'Unauthorized'
+    
+    session.pop('logged_in', None)
+    return redirect(url_for('startPage'))
+
+
+@app.before_request
+def before_request():
+    g.user = current_user
 
 if __name__ == '__main__':
     app.run()

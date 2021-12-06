@@ -21,7 +21,39 @@ function input_password() {
 }
 
 
-// function loginPage() {
+function loginPage() {
+    xhttp = new XMLHttpRequest();
+
+    // username = document.getElementById('username').value
+    // password = document.getElementById('password').value
+
+    localStorage.setItem("username", input_username());
+    
+    xhttp.open("/login", "POST", true);
+    body = { "username": input_username(), "password": input_password() };
+    // xhttp.send(body)
+    xhttp.setRequestHeader('Content-Type', 'application/json');
+    // console.log(JSON.stringify(body))
+    // console.log(body)
+    // xhttp.send(body)
+    xhttp.send(JSON.stringify(body))
+
+
+    xhttp.onload = function () {
+        try{
+            const myObj = this.responseText;
+            console.log(myObj)
+        } catch (err){
+            const myObj = this.responseText;
+
+            const display = document.getElementById('errorDisplay');
+            display.innerHTML = myObj;
+        }
+    }
+
+}
+
+// function signup(){
 //     xhttp = new XMLHttpRequest();
 
 //     // username = document.getElementById('username').value
@@ -29,7 +61,7 @@ function input_password() {
 
 //     localStorage.setItem("username", input_username());
     
-//     xhttp.open("/loginPage", "POST", true);
+//     xhttp.open("/login", "POST", true);
 //     body = { "username": input_username(), "password": input_password() };
 //     // xhttp.send(body)
 //     xhttp.setRequestHeader('Content-Type', 'application/json');
@@ -50,8 +82,10 @@ function input_password() {
 //             display.innerHTML = myObj;
 //         }
 //     }
-
 // }
+
+// function signup(){
+//     var myWindow = window.open("/signup", "_self");}
 
 
 function testJS() {

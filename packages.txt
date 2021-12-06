@@ -1,0 +1,28 @@
+mySQL
+
+Flask packages that need to be installed in order to run the app.
+
+Using pip install ...
+
+flask			- import Flask, redirect, url_for, request,render_template, json, flash, g
+flask-login		-import current_user, login_user,login_manager, LoginManager
+flask-security		-import Security, SQLAlchemyUserDatastore,  SQLAlchemySessionUserDatastore, UserMixin, RoleMixin, LoginForm, RegisterForm
+flask-sqlalchemy	-import SQLAlchemy, create_engine
+flask-admin		-import Admin, AdminIndexView, expose, helpers as admin_helpers
+flask-socketio		-import SocketIO, send, emit
+werkzeug
+wtforms
+
+Eventually will need to include:
+from flask_admin.menu import MenuLink
+from flask_login.utils import login_required, logout_user
+from flask_security.datastore import UserDatastore
+from flask_security.forms import Email
+from flask_security.utils import encrypt_password, hash_password, verify_hash, verift_password
+from sqlalchemy.engine import url,create_engine
+from sqlalchemy.orm import session, sessionmaker, relationship
+from flask_admin.contrib.sqla import ModelView
+from werkzeug.security import generate_password_hash, check_password_hash
+from sqlalchemy import create_engine
+from sqlalchemy.orm import scoped_session, sessionmaker
+from sqlalchemy.ext.declarative import declarative_base

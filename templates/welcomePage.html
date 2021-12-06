@@ -92,7 +92,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Readex+Pro&display=swap" rel="stylesheet">
-
+  <script src="templates/static/welcomePage.js"></script>
 </head>
 
 <body class="login-body">
@@ -103,18 +103,19 @@
       </header>
     </div>
     <div>
-      <form class="login-form" action="/login" method="POST">
+      <form class="login-form" action="/login">
         <!-- <form class="login-form" action="/path" method="POST" enctype="application/x-www-form-urlencoded"> -->
-        <fieldset>
+          <fieldset>
           <div class="login-legend">Login</div>
           <label class="label">Username</label>
           <input class="username-input input" name="username" id="username">
           <label class="label">Password</label>
-          <input type="password" name="pass" class="pass-input input" required>
+          <input type="password" name="pass" class="pass-input input">
           <div class="grid-login-signup">
             <div class="login-grid-1">
               <button class="login-button" type="submit" formmethod="POST">Log in</button>
-
+              
+              
 
             </div>
           </div>
@@ -125,17 +126,17 @@
 
       <form class="login-form" action="/path" method="GET">
         <fieldset>
-
           <div class="login-grid-2">
-            or <button class="signup-button" type="submit" onclick="signup()">Sign Up</button>
+            or <button class="signup-button" type="submit" formmethod = "PUT" >Sign Up</button>
           </div>
+          
         </fieldset>
       </form>
 
     </div>
   </div>
 
-  <script src="templates/static/login.js"></script>
+ 
 </body>
 
 </html>

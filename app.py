@@ -7,35 +7,30 @@ from flask_admin.menu import MenuLink
 from flask_login.utils import login_required, logout_user
 from flask_security.datastore import UserDatastore
 from flask_security.forms import Email
-from flask_security.utils import encrypt_password, hash_password, verify_hash
+from flask_security.utils import encrypt_password, hash_password, verify_hash, verify_password
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.engine import url,create_engine
 from sqlalchemy.orm import session, sessionmaker, relationship
 from flask_admin.contrib.sqla import ModelView
-from flask_login import current_user, login_user,login_manager, LoginManager
-from sqlalchemy.sql.schema import MetaData
-from werkzeug.datastructures import Accept
+# from sqlalchemy.sql.schema import MetaData
+# from werkzeug.datastructures import Accept
 from werkzeug.security import generate_password_hash, check_password_hash
-from wtforms import Form, BooleanField, StringField, PasswordField, validators
-from sqlalchemy.sql import text
+# from wtforms import Form, BooleanField, StringField, PasswordField, validators
+# from sqlalchemy.sql import text
 from flask_security import Security, SQLAlchemyUserDatastore,  SQLAlchemySessionUserDatastore, UserMixin, RoleMixin, LoginForm, RegisterForm
-import gc
+# import gc
 from flask_admin import helpers as admin_helpers
 # import hashlib import pbkdf2_sha512
 # from passlib.hash import sha256_crypt
-from flask_bcrypt import Bcrypt
+# from flask_bcrypt import Bcrypt
+from flask_socketio import SocketIO, send, emit
 
-# from admin import AdminView     #created python file
-
-
-from flask_security.utils import verify_password
 # from database import Base
-from flask_security import UserMixin, RoleMixin
+
 from sqlalchemy import create_engine
 from sqlalchemy.orm import relationship, backref
 from sqlalchemy import Boolean, DateTime, Column, Integer, String, ForeignKey
 from flask_login import current_user, login_user,login_manager, LoginManager
-from sqlalchemy import create_engine
 from sqlalchemy.orm import scoped_session, sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
 
@@ -59,6 +54,7 @@ engine = create_engine('sqlite:///app.db', echo = True)
 # app.config['FLASK_ADMIN_SWATCH'] = 'cerulean'
 app.config['FLASK_ADMIN_SWATCH'] = 'sandstone'
 
+socketio = SocketIO(app)
 
 login_manager = LoginManager(app) 
 login_manager.init_app(app) 
@@ -66,7 +62,7 @@ login_manager.login_view = 'login'
 
 db = SQLAlchemy(app)
 
-bcrypt = Bcrypt(app)
+# bcrypt = Bcrypt(app)
 
 Session = sessionmaker(app)
 session = Session()
@@ -205,11 +201,6 @@ def adminPage():
 #! this code block will display the apporpriate html page based on users choice within welcomePage.html
 @app.route('/path', methods = ['GET'])
 def path():
-    
-#     if request.method == 'GET':
-
-#         return render_template('welcomePage.html')
-
     if request.method == 'GET':
         return render_template('signup.html')
     
@@ -288,8 +279,10 @@ def loginPage():
             if current_user.is_authenticated:
                 print("im already authorized!")
                 
-                print("This is the cirrent user: " + current_user)
+                print("This is the cirrent user: " + str(current_user))
                 print(current_user.is_authenticated)
+                print("Is current user active?")
+                print(current_user.is_active)
                 return render_template('whiteboard1.html')
             
             print("###############################################")
@@ -387,14 +380,38 @@ def load_user(user_id):
 @login_manager.unauthorized_handler
 def unauthorized_handler():
     
-    session.pop('logged_in', None)
+    # session.pop('logged_in', None)
     return redirect(url_for('startPage'))
 
 
 @app.before_request
 def before_request():
     g.user = current_user
+    
+    
+#########################################################
+###### SocketIO Stuff#########
+###############################################
+# @socketio.on('message')
+# def handle_message(data):
+#     print('received message: ' + data)
+    
+# @socketio.on('my event')
+# def handle_my_custom_event(json):
+#     print('received json: ' + str(json))
+#     return 'one', 2
+
+
+
+@socketio.on('my event')
+def handle_my_custom_event(data):
+    emit('my response', data, broadcast=True)
+    
+def some_function():
+    socketio.emit('some event', {'data': 42})
+
 
 if __name__ == '__main__':
-    app.run()
+    socketio.run(app)
+    # app.run()
     

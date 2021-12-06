@@ -21,29 +21,27 @@ function input_password() {
 }
 
 
-function loginPage() {
+function loginSubmission() {
     xhttp = new XMLHttpRequest();
 
     // username = document.getElementById('username').value
     // password = document.getElementById('password').value
 
-    localStorage.setItem("username", input_username());
-    
+    // localStorage.setItem("username", input_username());
+
     xhttp.open("/login", "POST", true);
     body = { "username": input_username(), "password": input_password() };
     // xhttp.send(body)
-    xhttp.setRequestHeader('Content-Type', 'application/json');
-    // console.log(JSON.stringify(body))
-    // console.log(body)
-    // xhttp.send(body)
+    // xhttp.setRequestHeader('Content-Type', 'application/json');
+
     xhttp.send(JSON.stringify(body))
 
 
     xhttp.onload = function () {
-        try{
+        try {
             const myObj = this.responseText;
             console.log(myObj)
-        } catch (err){
+        } catch (err) {
             const myObj = this.responseText;
 
             const display = document.getElementById('errorDisplay');
@@ -60,7 +58,7 @@ function loginPage() {
 //     // password = document.getElementById('password').value
 
 //     localStorage.setItem("username", input_username());
-    
+
 //     xhttp.open("/login", "POST", true);
 //     body = { "username": input_username(), "password": input_password() };
 //     // xhttp.send(body)
@@ -84,13 +82,3 @@ function loginPage() {
 //     }
 // }
 
-// function signup(){
-//     var myWindow = window.open("/signup", "_self");}
-
-
-function testJS() {
-    var b = document.getElementById('username').value,
-        url = 'http://templates\studentView.html?name=' + encodeURIComponent(b);
-        
-    document.location.href = url;
-}

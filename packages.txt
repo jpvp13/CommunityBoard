@@ -1,4 +1,4 @@
-mySQL
+mySQL password: 12345678C
 
 Flask packages that need to be installed in order to run the app.
 

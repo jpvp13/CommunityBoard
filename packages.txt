@@ -1,4 +1,4 @@
-mySQL
+mySQL password: 12345678C
 
 Flask packages that need to be installed in order to run the app.
 
@@ -12,6 +12,8 @@ flask-admin		-import Admin, AdminIndexView, expose, helpers as admin_helpers
 flask-socketio		-import SocketIO, send, emit
 werkzeug
 wtforms
+email_validator
+flask-script
 
 Eventually will need to include:
 from flask_admin.menu import MenuLink
@@ -26,3 +28,4 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from sqlalchemy import create_engine
 from sqlalchemy.orm import scoped_session, sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
+import email_validator

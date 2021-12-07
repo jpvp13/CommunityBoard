@@ -8,16 +8,21 @@ const height = canvas.height = window.innerHeight-50;
 ctx.fillStyle = 'rgb(242, 242, 242)';
 ctx.fillRect(0,0,width,height);
 
+var slider = document.getElementById("pointSize");
+var output = document.querySelector(".output");
+var pick = document.getElementById("colorPicker");
 
-function pick(e){
-    color = this.value;
-    ctx.globalCompositeOperation = 'source-over';
+//slider.onchange = size;
+output.innerHTML = slider.value;
+
+pick.oninput = function(){
+  color = this.value;
+  ctx.globalCompositeOperation = 'source-over';
 }
-function size(e){
-    thickness = this.value;
+slider.oninput = function() {
+  output.innerHTML = this.value;
+  thickness = this.value;
 }
-document.getElementById("colorPicker").onchange = pick;
-document.getElementById("pointSize").onchange = size;
 
 /*function eraser(){
     ctx.globalCompositeOperation = "destination-out";  

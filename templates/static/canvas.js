@@ -10,6 +10,8 @@ var slider = document.getElementById("pointSize");
 var output = document.querySelector(".output");
 var pick = document.getElementById("colorPicker");
 var downloadCanvas = document.querySelector(".download");
+var clear = document.querySelector(".clear");
+var pencil = document.getElementById("pencil");
 
 output.innerHTML = slider.value;
 
@@ -19,11 +21,14 @@ var thickness = '10';
 
 pick.onchange = function(){
   color = this.value;
-  //ctx.globalCompositeOperation = 'source-over';
 }
 slider.oninput = function() {
   output.innerHTML = this.value;
   thickness = this.value;
+}
+
+pencil.onclick = function(){
+  color = pick.value;
 }
 
 downloadCanvas.onclick = function() {
@@ -38,23 +43,13 @@ downloadCanvas.onclick = function() {
     document.body.removeChild( tmpLink ); 
 };
 
-/*function eraser(){
-    ctx.globalCompositeOperation = 'destination-out';                 
-    ctx.fillStyle = 'rgba(242,242,242,1)';                 
-    ctx.strokeStyle = 'rgba(242,242,242,1)';
-}*/
 
 $(document).ready(function() {
     var flag, dot_flag = false,
       prevX, prevY, currX, currY = 0;
     var $canvas = $('#canvas');
     var ctx = $canvas[0].getContext('2d');
-    //var mode;
 
-    /*$("#pencil").click(function(){
-      mode = "pencil";
-      ctx.globalCompositeOperation = 'source-over';
-  });*/
   
     $canvas.on('mousemove mousedown mouseup mouseout', function(e) {
       prevX = currX;
@@ -78,17 +73,12 @@ $(document).ready(function() {
           ctx.stroke();
           ctx.closePath();
         }
-      
       }
     });
 
-    /*$('#eraser').on('click',function(e){
-      ctx.strokeStyle = 'rgb(242, 242, 242)';
+    $('#eraser').on('click',function(e){
+      color = 'rgb(242, 242, 242)';
       });
-
-    $('#pencil').on('click',function(e){
-      ctx.globalCompositeOperation = 'source-over';
-    });*/
 
     $('.clear').on('click', function(e) {
         c_width = $canvas.width();
@@ -97,9 +87,5 @@ $(document).ready(function() {
         ctx.clearRect(0, 0, c_width, c_height);
         ctx.fillRect(0, 0, c_width, c_height);
       });
-    
-    /*$('.download').on('click', function(e){
-      var image = $canvas.toDataURL("image/jpg");
-      download.href = image;
-    });*/
   });
+

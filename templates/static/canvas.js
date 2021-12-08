@@ -11,12 +11,15 @@ var output = document.querySelector(".output");
 var pick = document.getElementById("colorPicker");
 var downloadCanvas = document.querySelector(".download");
 
-//slider.onchange = size;
 output.innerHTML = slider.value;
+
+// default color and pencil size
+var color = 'red';
+var thickness = '10';
 
 pick.onchange = function(){
   color = this.value;
-  ctx.globalCompositeOperation = 'source-over';
+  //ctx.globalCompositeOperation = 'source-over';
 }
 slider.oninput = function() {
   output.innerHTML = this.value;
@@ -25,7 +28,7 @@ slider.oninput = function() {
 
 downloadCanvas.onclick = function() {
   var image = canvas.toDataURL("image/png");
-  //this.href = image;
+  
   var tmpLink = document.createElement('a');
     tmpLink.download = 'image.png';
     tmpLink.href = image;  
@@ -71,18 +74,11 @@ $(document).ready(function() {
           ctx.lineTo(currX, currY);
           ctx.strokeStyle = color;
           ctx.lineWidth = thickness;
+          ctx.lineJoin = ctx.lineCap = 'round';
           ctx.stroke();
           ctx.closePath();
-           /*else if (mode == "eraser"){
-            ctx.globalCompositeOperation="destination-out";
-            ctx.arc(prevX,prevY,8,0,Math.PI*2,false);
-            ctx.fill();
-            ctx.fillStyle = 'rgb(242, 242, 242)';
-            ctx.fillRect(0, 0, width, height);
-          }*/
-          //currX = prevX;
-          //currY = prevY;
         }
+      
       }
     });
 

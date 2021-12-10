@@ -1,87 +1,4 @@
 <!DOCTYPE html>
-<!-- <html>
-
-<head>
-  <title>Welcome Page</title>
-
-</head>
-
-<body>
-  <p>Welcome! Select a option!</p>
-
-  <form action="/path" method="POST" enctype="application/x-www-form-urlencoded">
-
-    <button>Sign-Up</button>
-  </form>
-
-  <form action="/path" method="GET" >
-
-    <button >Login</button>
-    <!-- <a href="login.html"><button> Login </button></a> -->
-<!-- </form>
-    <!-- <script> -->
-<!-- function myfunction() {
-        console.log("This is a working button");
-      }
-
-      
-    </script>
-
-</body>
-
-</html> -->
-
-
-
-<!DOCTYPE html>
-<!-- <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Community Board</title>
-    <script src="templates/static/login.js"></script>
-
-</head>
-<body>
-    <div class = "grid">
-        <div>
-            <header>
-               <h1>Community Board</h1>
-            </header>
-        </div>
-        <div>
-           <section>
-            <form action="/login" method="POST">
-
-            <!-- <form action="/login" method="POST" enctype="application/x-www-form-urlencoded">
-                <fieldset>
-                    <legend>Login</legend>
-                    <div>
-                        <label class="label">Username</label>
-    
-                    </div>
-                    <div>
-                        <input class="username-input" name="username" id="username">
-                    </div>
-    
-                    <div class="label">
-                        <label>Password</label>
-                    </div>
-                    <div>
-                        <input type="password" name="pass" class="pass-input" required>
-                    </div>
-                    <div>
-                        <button type="submit" >Log in </button>
-                    </div>
-                    <div class="error"></div>
-                </fieldset>
-            </form>
-           </section>
-        </div>
-    </div>
-</body>
-</html> -->
-
-<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -89,9 +6,13 @@
   <title>Community Board</title>
 
   <link href="templates/static/style.css" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@2.5.0/fonts/remixicon.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Readex+Pro&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Readex+Pro&display=swap" rel="stylesheet"> 
+
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.0/jquery.min.js"></script>
   <script src="templates/static/welcomePage.js"></script>
 </head>
 
@@ -103,9 +24,16 @@
       </header>
     </div>
     <div>
+
+      <p id="errorDisplay">
+        {% for i in error %}
+        {{ i }}
+        {% endfor %}
+      </p>
+
       <form class="login-form" action="/login">
         <!-- <form class="login-form" action="/path" method="POST" enctype="application/x-www-form-urlencoded"> -->
-          <fieldset>
+        <fieldset>
           <div class="login-legend">Login</div>
           <label class="label">Username</label>
           <input class="username-input input" name="username" id="username">
@@ -114,8 +42,8 @@
           <div class="grid-login-signup">
             <div class="login-grid-1">
               <button class="login-button" type="submit" formmethod="POST">Log in</button>
-              
-              
+
+
 
             </div>
           </div>
@@ -127,16 +55,16 @@
       <form class="login-form" action="/path" method="GET">
         <fieldset>
           <div class="login-grid-2">
-            or <button class="signup-button" type="submit" formmethod = "PUT" >Sign Up</button>
+            or <button class="signup-button" type="submit" formmethod="PUT">Sign Up</button>
           </div>
-          
+
         </fieldset>
       </form>
 
     </div>
   </div>
 
- 
+
 </body>
 
 </html>

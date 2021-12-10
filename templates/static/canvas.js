@@ -19,6 +19,14 @@ output.innerHTML = slider.value;
 var color = 'red';
 var thickness = '10';
 
+
+// function logout(){
+//   xhttp = new XMLHttpRequest();
+
+//   console.log("I clicked log out")
+//   xhttp.open('POST', "/logout", true);
+// }
+
 pick.onchange = function(){
   color = this.value;
 }

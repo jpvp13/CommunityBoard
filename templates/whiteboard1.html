@@ -9,10 +9,11 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Readex+Pro&display=swap" rel="stylesheet"> 
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@2.5.0/fonts/remixicon.css">
+
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.0/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js" integrity="sha512-q/dWJ3kcmjBLU4Qc47E4A9kTB4m3wuTY7vkFJDTZKjTs8jhyGQnaUrxa0Ytd0ssMZhbNua9hE+E7Qv1j+DyZwA==" crossorigin="anonymous"></script>
+
     <script type="text/javascript" charset="utf-8">
         var socket = io();
         socket.on('connect', function() {
@@ -22,7 +23,7 @@
 
 </head>
 <body>
-    
+
         <div id="drawingToolbar" class="toolbar">
             <a ><i type ="button" class="ri-pencil-line ri-2x" id="pencil"></i></a>
             <a ><i type ="button" class="ri-eraser-line ri-2x" id="eraser"></i></a>
@@ -31,6 +32,16 @@
             <div class="output">10</div>
             <a ><input type="button" value = "Clear All" class="clear"></a>
             <a ><input type="button" value = "Download" class ="download" download="image.png" href=""></a>
+            
+            <form class="login-form" action="/logout">
+                <!-- <fieldset> -->
+                    <a><button class="login-button" type="submit" formmethod="POST">Logout</button></a>
+                <!-- </fieldset> -->
+            </form>
+
+                
+            
+
         </div>
         <div class="drawingPlace">
             <canvas class="canvas" id = "canvas"></canvas>

@@ -1,4 +1,3 @@
-from re import X
 from typing import Text
 from flask import Flask, redirect, url_for, request,render_template, json, flash, g
 from flask.globals import current_app
@@ -12,26 +11,17 @@ from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.engine import url,create_engine
 from sqlalchemy.orm import session, sessionmaker, relationship
 from flask_admin.contrib.sqla import ModelView
-# from sqlalchemy.sql.schema import MetaData
-# from werkzeug.datastructures import Accept
 from werkzeug.security import generate_password_hash, check_password_hash
-# from wtforms import Form, BooleanField, StringField, PasswordField, validators
-# from sqlalchemy.sql import text
 from flask_security import Security, SQLAlchemyUserDatastore,  SQLAlchemySessionUserDatastore, UserMixin, RoleMixin, LoginForm, RegisterForm
 from flask_admin import helpers as admin_helpers
-# import hashlib import pbkdf2_sha512
-# from passlib.hash import sha256_crypt
-# from flask_bcrypt import Bcrypt
 from flask_socketio import SocketIO, send, emit
-
-# from database import Base
-
 from sqlalchemy import create_engine
 from sqlalchemy.orm import relationship, backref
 from sqlalchemy import Boolean, DateTime, Column, Integer, String, ForeignKey
 from flask_login import current_user, login_user,login_manager, LoginManager
 from sqlalchemy.orm import scoped_session, sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
+from flask_mysqldb import MySQL
 
 
 app = Flask(__name__, static_url_path='', static_folder='')
@@ -39,16 +29,18 @@ app.config['DEBUG'] = True
 app.config['SECRET_KEY'] = '\xfd{H\xe5<'
 app.config['SECURITY_PASSWORD_SALT'] = '.5\xd1\x01O<!\xd5\xa2\xa0\x9fR'
 
-app.config['SECURITY_PASSWORD_HASH'] = 'pbkdf2_sha512'  
-# app.config['SECURITY_LOGIN_URL'] = '/login'
-# app.config['SECURITY_POST_LOGIN_VIEW'] = '/lobby'
-# app.config['SECURITY_LOGIN_USER_TEMPLATE'] = 'security/login.html'  #overriding flask-securitys default login page
+app.config['SECURITY_PASSWORD_HASH'] = 'pbkdf2_sha512'
 
 
 
-app.config ['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///app.db'
-engine = create_engine('sqlite:///app.db', echo = True)
-# engine = create_engine('sqlite:///app.db', echo = True)
+
+
+# app.config ['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://jpvptest:123456789CSE@jpvptest.mysql.pythonanywhere-services.com/jpvptest$mysqlDatabase'
+# engine = create_engine('mysql+pymysql://jpvptest:123456789CSE@jpvptest.mysql.pythonanywhere-services.com/jpvptest$mysqlDatabase', echo = True)
+
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:0000@localhost/newTesting'
+engine = create_engine('mysql+pymysql://root:0000@localhost/newTesting', echo = True)
+
 
 
 # app.config['FLASK_ADMIN_SWATCH'] = 'cerulean'
@@ -56,8 +48,8 @@ app.config['FLASK_ADMIN_SWATCH'] = 'sandstone'
 
 socketio = SocketIO(app)
 
-login_manager = LoginManager(app) 
-login_manager.init_app(app) 
+login_manager = LoginManager(app)
+login_manager.init_app(app)
 login_manager.login_view = 'login'
 
 db = SQLAlchemy(app)
@@ -88,15 +80,17 @@ class Role(db.Model, RoleMixin):
     id = Column(db.Integer(), primary_key=True)
     name = Column(db.String(80), unique=True)
     description = Column(db.String(255))
-    
-    
+
+
 # class User( UserMixin, Base):
 class User(db.Model, UserMixin):
     __tablename__ = 'user'
     id = Column(db.Integer, primary_key=True)
     email = Column(db.String(255), unique=True)
     username = Column(db.String(255), unique = True)
-    password = Column(db.String)  #no size specified
+    # password = Column(db.String)  #no size specified
+    password = Column(db.Text)  #no size specified
+
     firstName = Column(db.String(255))
     lastName = Column(db.String(255))
     last_login_at = Column(DateTime())
@@ -107,9 +101,15 @@ class User(db.Model, UserMixin):
     active = Column(db.Boolean())
     confirmed_at = Column(DateTime())
     roles = relationship('Role', secondary='roles_users', backref=backref('users', lazy='dynamic'))
-    
-    
-   
+
+    def is_authenticated(self):
+        return True
+        # return None
+
+    def is_active(self):   
+        return True    
+
+
 class AdminView(ModelView):
 
     def __init__(self, *args, **kwargs):
@@ -128,7 +128,7 @@ class AdminView(ModelView):
 class CustomLoginForm(LoginForm):
     def validate(self):
         response = super(CustomLoginForm, self).validate()
-        
+
         return response
 
 user_datastore = SQLAlchemySessionUserDatastore(db_session,User, Role)
@@ -137,12 +137,8 @@ security = Security(app, user_datastore, login_form = CustomLoginForm)
 
 admin = Admin(app, name='Dashboard', template_mode='bootstrap3', index_view= AdminView(User, db.session, url = '/admin', endpoint = '/logout'))
 
-# admin.add_view(AdminView(User, db_session))
 admin.add_view(AdminView(RolesUsers, db_session))
 admin.add_view(AdminView(Role, db_session))
-# admin.add_view(ModelView(User, db_session))
-# admin.add_view(ModelView(RolesUsers, db_session))
-# admin.add_view(ModelView(Role, db_session))
 admin.add_link(MenuLink(name='logout', category='', url="/logout"))
 
 
@@ -159,9 +155,10 @@ def security_context_processor():
 # @app.before_first_request
 # def create_user():
 #     db.create_all()
-#     # init_db()
-#     # db.add(email='test', username = 'm', firstName = 'John', lastName = 'Villalvazo', password= '11')
-#     user_datastore.create_user(email='test', username = 'a', firstName = 'John', lastName = 'Villalvazo', password= 'a')
+    
+#     hashedPassword = generate_password_hash('00')
+    
+#     user_datastore.create_user(email='admin@admin.com', username = 'admin', firstName = 'admin', lastName = 'admin', password= hashedPassword)
 #     # db.session.add_all(email='test', username = 'm', firstName = 'John', lastName = 'Villalvazo', password= '11')
 #     db_session.commit()
 #     db_session.close()
@@ -180,16 +177,13 @@ def startPage():
     # return render_template('login.html')
 
 #! This portion will alow for a user to log out, only works if they have signed in
-@app.route('/logout')
+@app.route('/logout', methods = ['GET', 'POST'])
 @login_required
 def logout():
     logout_user()
-    
-    
-    
-    
     print("you have been logged out")
-    return redirect(url_for('/'))
+    return redirect('/')
+    # return redirect(url_for('/'))
 
 @app.route('/adminView')
 @login_required
@@ -203,7 +197,7 @@ def adminPage():
 def path():
     if request.method == 'GET':
         return render_template('signup.html')
-    
+
 
 #! this is where a users info will go when logging in. The code will first check to see if the user
 #! is already authenticated (aka if you refresh the page and come back it should just let the person to continue
@@ -218,61 +212,31 @@ def path():
 #! else if none of these checks are met, it will just return user to the login page
 @app.route('/login', methods = ['POST', 'PUT'])
 def loginPage():
-    
-    # return "im confused"
-    
-    
-
 
     if request.method == 'PUT':
         print('signup here')
         return render_template('signup.html')
-        # return redirect(url_for('signup'))
-        
-    # elif request.method == 'GET':
 
     elif request.method == 'POST':
         
-        
-        # EMAIL = request.form.get('email')
         USERNAME = request.form.get('username')
         PASSWORD = request.form.get('pass')
         
-        # test= User.query.filter_by(username = USERNAME).first() 
 
-        
-        # hashedPassword = hash_password(PASSWORD)
-        # hashedPassword = encrypt_password(PASSWORD)
         hashedPassword = generate_password_hash(PASSWORD)
 
-        # print("#########################################################")
-        # print("Hashed Password")
-        # print(hashedPassword)
-        
-        # checkedPassword = bcrypt.check_password_hash(hashedPassword, PASSWORD)
         checkedPassword = check_password_hash(hashedPassword, PASSWORD)
 
-        # print("#########################################################")
-        # print("Equal?")
-        # print(test.password)
-        # print(PASSWORD)
-        # print(test.password == PASSWORD)
-
-        # print("#########################################################")
-        # print("Checked Password")
-        # print(checkedPassword)
-        
+    
+        print("Password match?" + str(checkedPassword))
         user = User.query.filter_by(username = USERNAME).first() 
 
-
-        # print("#########################################################")
-        # print("###### What is this output? @@@@ ")
-        print("The current user is: " + user.username)
+        # print("The current user is: " + user.username)
         
-        # if str(User.password) == str(hashedPassword):
-        if user.username == 'admin' and checkedPassword == True:
+        if USERNAME == 'admin' and checkedPassword == True:
+            login_user(user)
+
             return redirect('/admin')
-            # return redirect(url_for('admin.index'))
         
         elif user and checkedPassword == True:
             
@@ -292,21 +256,25 @@ def loginPage():
             login_user(user)
             # return redirect(url_for('lobby'))     #!main place this will redirect to, but can be changed to different places
             return render_template('whiteboard1.html')
-        else:
-            return "<p> Incorrect credentials, please try again</p>"
+        else :
+            print("IM CHECKING IF THAT PERSON EXISTS?")
+            message = "FIX ME, I AM UNREADABLE"
+            return render_template("welcomePage.html", error = message)
+            # return "<p> Incorrect credentials, please try again</p>"
             
         
+        
     # return redirect(url_for('login'))
-    return render_template('login.html')
+    return render_template('welcomePage.html')
 
 #~ this code block is used to sign a user up to our app (aka adding their info to our db). This will take in any info we want, but
-#~ as a testing purpose i used the below. After this, the users entered password is hashed using werkzeug.security module which takes care of 
+#~ as a testing purpose i used the below. After this, the users entered password is hashed using werkzeug.security module which takes care of
 #~ generating a hash and checking the hashed password. After hashing the password, it will query our db to check if this infromation has already
 #~ been entered into our app.
 
 #~if the user does NOT exisit already in our db, we go ahead and add them into our db with their entered info and newly hashed password. After commiting
 #~ addition into our db, we push them through to the lobby page (or anywhere else needed/wanted). If no checks are passed, then we just send them back to
-#~ the signup page. Once created a account with us and pushed into app, i assume we can use the "login_user(user)" feature of flask-login since they will need 
+#~ the signup page. Once created a account with us and pushed into app, i assume we can use the "login_user(user)" feature of flask-login since they will need
 #~ to navigate to pages once they create a account
 @app.route('/signup', methods = ['POST'])
 def signup():
@@ -324,32 +292,30 @@ def signup():
         hashedPassword = generate_password_hash(PASSWORD)
         print(hashedPassword)
         
-        # hashedPassword = hash_password(PASSWORD)
-        # print(hashedPassword)
                 
-        user = User.query.filter_by(email = EMAIL, username = USERNAME, password = hashedPassword).first() 
+        user = User.query.filter_by(firstName = FIRSTNAME, lastName = LASTNAME,  username = USERNAME, password = hashedPassword, email = EMAIL).first()
 
-        # print("USERNAME " + User.username)
+        if USERNAME == "admin" or USERNAME == "administrator" or USERNAME == "Admin" or USERNAME == "ADMIN":
+                message = "you do not have permission to create a administrator account."
+                return render_template("signup.html", error = message)
+            
+            
+        if user: #checks to see if user is unique
+            print('AHHHHHHHHHHHH')
         
-        
-        #! need to make this error more graceful
-        # if User.username == USERNAME:
-        #         return ('<p>The entered username already exsist</p>')
-        # elif User.email == EMAIL:
-        #     return ('<p>The entered email already exsist</p>')
-        #!
-        
-        if user: #checks to see if user is not unique
-            return "This username already exists. Please enter a different username"
-        else:
+            # message = "This username already exists. Please enter a different username"
+            message = "FIX ME, I AM UNREADABLE"
+            return render_template("signup.html", error = message)
+        else :
             # init_db()
-            user_datastore.create_user(email=EMAIL, username = USERNAME, firstName = FIRSTNAME, lastName = LASTNAME, password= hashedPassword, )
+            print("I am attempting to creating a new user now...")
+            user_datastore.create_user(firstName = FIRSTNAME, lastName = LASTNAME,  username = USERNAME, password = hashedPassword, email = EMAIL)
             db_session.commit()
             db_session.close()
-            # gc.collect()
             
-            # login_user(user)    #! discuss with team, confirm if this is correct
-            # return redirect(url_for('lobby'))
+            
+            
+            
             return render_template("welcomePage.html")
         
             
@@ -372,14 +338,14 @@ def testing():
     # return render_template('lobby.html')
 
 #& required code to help flask-login work
-@login_manager.user_loader 
-def load_user(user_id): 
+@login_manager.user_loader
+def load_user(user_id):
     return User.query.get(user_id)
-    
+
 #^ this code is meant to allow for a unauthorized user... not user if properly working at this moment
 @login_manager.unauthorized_handler
 def unauthorized_handler():
-    
+
     # session.pop('logged_in', None)
     return redirect(url_for('startPage'))
 
@@ -387,15 +353,15 @@ def unauthorized_handler():
 @app.before_request
 def before_request():
     g.user = current_user
-    
-    
+
+
 #########################################################
 ###### SocketIO Stuff#########
 ###############################################
 # @socketio.on('message')
 # def handle_message(data):
 #     print('received message: ' + data)
-    
+
 # @socketio.on('my event')
 # def handle_my_custom_event(json):
 #     print('received json: ' + str(json))
@@ -406,7 +372,7 @@ def before_request():
 @socketio.on('my event')
 def handle_my_custom_event(data):
     emit('my response', data, broadcast=True)
-    
+
 def some_function():
     socketio.emit('some event', {'data': 42})
 
@@ -414,4 +380,3 @@ def some_function():
 if __name__ == '__main__':
     # socketio.run(app)
     app.run()
-    

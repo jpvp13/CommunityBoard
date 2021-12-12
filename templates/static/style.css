@@ -8,8 +8,8 @@
     height: 100vh;
     background: linear-gradient(
       to right,
-      rgb(63, 236, 228) 0%,
-      rgb(63, 236, 228) 50%,
+      rgb(60, 226, 218) 0%,
+      rgb(60, 226, 218) 50%,
       white 50%,
       white 100%
     );    
@@ -29,13 +29,24 @@
 fieldset{
     padding:25px;
     padding-top: 15px;
+    padding-bottom:10px;
     border:none;
     width: 250px;
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    /*box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);*/
 }
 
 /*  LOGIN PAGE SPECIFIC CSS  */
+.merge-forms{
+    padding:0;
+    margin:30%;
+    margin-right:39%;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
 
+.bottom-fieldset-fix{
+    padding-top:0px;
+    padding-bottom:25px;
+}
 .home-grid{
     display:grid;
     grid-template-columns: 1fr 1fr;
@@ -50,9 +61,16 @@ fieldset{
 }
 
 .login-form{
-    margin: 20%;
     margin-right:0%;
     margin-top:35%;  
+    margin-bottom:0%;
+}
+
+.signup-button-fix{
+    margin-right:0%;
+    margin-top:0%;
+    padding-top:0%;
+
 }
 
 .login-legend{
@@ -64,6 +82,51 @@ fieldset{
     display:grid;
     grid-template-columns: 1fr 1fr;
 }
+
+.login-button button{
+    width:190%;
+    padding-top:5px;
+    padding-bottom:5px;
+    font-size:15px;
+
+    cursor:pointer;
+    border-radius: 4px;
+    color:black;
+    background-color:white;
+    border: 1px solid rgb(60, 226, 218);
+    transition:.3s;
+}
+
+.login-button button:hover{
+    background-color:rgb(60, 226, 218);
+    color:white;
+}
+
+.signup-button button{
+    width:95%;
+    padding-top:5px;
+    padding-bottom:5px;
+    font-size:15px;
+
+
+    cursor:pointer;
+    border-radius: 4px;
+    color:black;
+    background-color:white;
+    border: 1px solid black;
+    transition:.3s;
+}
+
+.signup-button button:hover{
+    background-color:black;
+    color:white;
+}
+
+.no-account{
+    font-size:13px;
+}
+
+
 
 /*  SIGNUP SPECIFIC CSS  */
 

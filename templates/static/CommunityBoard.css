@@ -3,7 +3,6 @@
     margin:0;
     font-family: 'Readex Pro', sans-serif;
 }
-
 .login-body{
     height: 100vh;
     background: linear-gradient(
@@ -14,18 +13,15 @@
       white 100%
     );    
 }
-
 .input{
     border: 1px solid rgb(230, 230, 230);
     border-width:1px;
     background-color: rgb(243, 243, 243);
-    width:75%;
+    width: 100%;
     height:23px;
     margin:2px 0px 15px 0px;
     border-radius: 4px;
-
 }
-
 .input2{
     border: 1px solid rgb(230, 230, 230);
     border-width:1px;
@@ -35,7 +31,6 @@
     margin:2px 0px 15px 0px;
     border-radius: 4px;
 }
-
 fieldset{
     padding:25px;
     padding-top: 15px;
@@ -44,7 +39,6 @@ fieldset{
     width: 250px;
     /*box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);*/
 }
-
 /*  LOGIN PAGE SPECIFIC CSS  */
 .merge-forms{
     padding:0;
@@ -52,7 +46,6 @@ fieldset{
     margin-right:39%;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
-
 .bottom-fieldset-fix{
     padding-top:0px;
     padding-bottom:25px;
@@ -61,40 +54,31 @@ fieldset{
     display:grid;
     grid-template-columns: 1fr 1fr;
 }
-
 .login-header{
     font-size: 45px;
     color:white; 
-
     margin-top:25%; 
     margin-left:5%;
 }
-
 .login-form{
     margin-right:0%;
     margin-top:35%;  
     margin-bottom:0%;
 }
-
 .signup-button-fix{
     margin-right:0%;
     margin-top:0%;
     padding-top:0%;
-
 }
-
 .login-legend{
     margin-bottom:10%;
     font-size: 25px;
 }
-
-
 .login-button button{
     width:75%;
     padding-top:5px;
     padding-bottom:5px;
     font-size:15px;
-
     cursor:pointer;
     border-radius: 4px;
     color:black;
@@ -102,19 +86,15 @@ fieldset{
     border: 1px solid rgb(60, 226, 218);
     transition:.3s;
 }
-
 .login-button button:hover{
     background-color:rgb(60, 226, 218);
     color:white;
 }
-
 .signup-button button{
     width:75%;
     padding-top:5px;
     padding-bottom:5px;
     font-size:15px;
-
-
     cursor:pointer;
     border-radius: 4px;
     color:black;
@@ -122,20 +102,14 @@ fieldset{
     border: 1px solid black;
     transition:.3s;
 }
-
 .signup-button button:hover{
     background-color:black;
     color:white;
 }
-
 .no-account{
     font-size:13px;
 }
-
-
-
 /*  SIGNUP SPECIFIC CSS  */
-
 .registration-fieldset{
     padding:25px;
     padding-top: 15px;
@@ -144,12 +118,11 @@ fieldset{
     width: 250px;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
-
 .signup-form{
     display:flex;
     justify-content: center;
     margin-top:10%;
-    
+
 }
 
 .login-button2 button{

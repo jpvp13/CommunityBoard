@@ -42,6 +42,8 @@ app.config['SECURITY_PASSWORD_HASH'] = 'pbkdf2_sha512'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:0000@localhost/newDB'
 engine = create_engine('mysql+pymysql://root:0000@localhost/newDB', echo = True)
 
+# app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///app.db'
+# engine = create_engine('sqlite:///app.db', echo = True)
 
 
 # app.config['FLASK_ADMIN_SWATCH'] = 'cerulean'
@@ -239,16 +241,6 @@ def loginPage():
             
             if current_user.is_authenticated:
                 print("im already authorized!")
-                
-            #     print("This is the cirrent user: " + str(current_user))
-            #     print(current_user.is_authenticated)
-            #     print("Is current user active?")
-            #     print(current_user.is_active)
-            #     return render_template('whiteboard1.html')
-            
-            # print("###############################################")
-            # print("The user who is currently logged in")
-            # print(current_user)
             
             login_user(user)
             # return redirect(url_for('lobby'))     #!main place this will redirect to, but can be changed to different places
@@ -278,7 +270,7 @@ def signup():
     
     print("inside of signup")
     if request.method == 'POST':
-        print("inside of if statement")
+        # print("inside of if statement")
 
         EMAIL = request.form.get('email')
         USERNAME = request.form.get('username')
@@ -292,9 +284,10 @@ def signup():
                 
         user = User.query.filter_by(username = USERNAME, password = hashedPassword, email = EMAIL).first()
 
-        # if USERNAME == "admin" or USERNAME == "administrator" or USERNAME == "Admin" or USERNAME == "ADMIN":
-        #         message = "you do not have permission to create a administrator account."
-        #         return render_template("signup.html", error = message)
+        if USERNAME == "admin" or USERNAME == "administrator" or USERNAME == "Admin" or USERNAME == "ADMIN":
+            print("uhh u cant do that")
+            message = "you do not have permission to create a administrator account."
+            return render_template("signup.html", error = message)
             
             
         if user: #checks to see if user is unique
@@ -309,13 +302,26 @@ def signup():
             # user_datastore.create_user(username = USERNAME, password = hashedPassword, email = EMAIL)
             # db_session.commit()
             # db_session.close()
-            newUser = User(EMAIL, USERNAME, hashedPassword)
-            db.session.add(newUser)
-            db.session.commit()
-            db.session.close()
+            
+            checkingUser = User.query.filter_by(username = USERNAME).first()
+            if checkingUser:
+                return ("This username already exists")
+            
+            else:
+                # newUser = User(EMAIL, USERNAME, hashedPassword)
+                db.session.add(User(EMAIL, USERNAME, hashedPassword))
+                db.session.commit()
+                db.session.close()
+            
+                print("New user has been created")
+                
+                newUser = User.query.filter_by(username = USERNAME, password = hashedPassword, email = EMAIL).first()
+                
+                login_user(newUser)    #since we just push the person into the app after creating a user
             
             
-            return render_template("welcomePage.html")
+                # return render_template("welcomePage.html")
+                return render_template("whiteboard1.html")
         
             
             

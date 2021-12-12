@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+        <title>Signup</title>
+        <link href="templates/static/CommunityBoard.css" rel="stylesheet">
+        <link rel="preconnect" href="https://fonts.googleapis.com/%22%3E">
+        <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Readex+Pro&display=swap" rel="stylesheet">
+
+    </head>
+
+    <div class="grid">
+        <body>
+
+            <div>
+                <form class="signup-form" action="/signup">
+                    <fieldset class="registration-fieldset">
+                        <div class="login-legend">Register and Login</div>
+                        <label>Email</label>
+                        <input class="input" name = "email">
+
+                        <label>Username</label>
+                        <input class="input" name = "username">
+
+                        <label>Password</label>
+                        <input class="input" type="password" name = "password">
+                        <div class="login-button"><button type="submit" formmethod="POST">Sign Up</button>
+                        </div>
+
+                    </fieldset>
+                </form>
+             </div>
+
+
+
+             <script src="templates/static/signup.js"></script>
+
+        </body>
+    </div>
+</html>

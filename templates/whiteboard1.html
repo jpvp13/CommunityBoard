@@ -29,20 +29,17 @@
             <a ><i type ="button" class="ri-eraser-line ri-2x" id="eraser"></i></a>
             <a ><input class="colorPicker" id = "colorPicker" type="color" value="#ff0000"></a>
             <a ><input class="pointSize" id = "pointSize" type="range" min="2" max="50" value="10" ></a>
-            <div class="output">10</div>
-            <a ><input type="button" value = "Clear All" class="clear"></a>
-            <a ><input type="button" value = "Download" class ="download" download="image.png" href=""></a>
+           <a><div class="output">10</div></a> 
+           <a><input type="button" value = "Clear All" class="clear bootun"></a> 
+           <a><input type="button" value = "Download" class ="download bootun" download="image.png" href=""></a>
+           <a><form class="login-form" action="/logout">
+            <button class="login-button" type="submit" formmethod="POST">Logout</button>
+            </form></a>
             
-            <form class="login-form" action="/logout">
-                <!-- <fieldset> -->
-                    <a><button class="login-button" type="submit" formmethod="POST">Logout</button></a>
-                <!-- </fieldset> -->
-            </form>
-
-                
             
-
         </div>
+
+
         <div class="drawingPlace">
             <canvas class="canvas" id = "canvas"></canvas>
         </div>

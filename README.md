@@ -16,7 +16,8 @@ source .venv/bin/activate
 py -3 -m venv .venv
 .venv\scripts\activate
 
+#Installing Packages
 
-to install all required packages, once you have activated your virtual environment make sure to navigate into your working folder. Once inside the folder, within the terminal run command 
+To install all required packages, once you have activated your virtual environment make sure to navigate into your working folder. Once inside the folder, within the terminal run command 
 
 pip install -r requirement.txt

@@ -1,6 +1,6 @@
 from typing import Text
 from flask import Flask, redirect, url_for, request,render_template, json, flash, g
-from flask.globals import current_app
+# from flask.globals import current_app
 from flask_admin import Admin, AdminIndexView, expose
 from flask_admin.menu import MenuLink
 from flask_login.utils import login_required, logout_user

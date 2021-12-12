@@ -24,11 +24,14 @@ var thickness = '10';
 socketio.on('connect', ()=> {
   console.log('--connected--');
 })
+
+
 socketio.on('disconnect', ()=> {
   console.log('--disconnected--');
 })
 
 socketio.on('client_count', (count) => {
+  document.getElementById("totalUsers").innerHTML = count + " drawers active";
   console.log('There are ' + count + ' connected clients.');
 });
 

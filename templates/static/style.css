@@ -78,13 +78,9 @@ fieldset{
     font-size: 25px;
 }
 
-.grid-login-signup{
-    display:grid;
-    grid-template-columns: 1fr 1fr;
-}
 
 .login-button button{
-    width:190%;
+    width:95%;
     padding-top:5px;
     padding-bottom:5px;
     font-size:15px;
@@ -129,6 +125,22 @@ fieldset{
 
 
 /*  SIGNUP SPECIFIC CSS  */
+
+.registration-fieldset{
+    padding:25px;
+    padding-top: 15px;
+    padding-bottom:10px;
+    border:none;
+    width: 250px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.signup-form{
+    display:flex;
+    justify-content: center;
+    margin-top:10%;
+    
+}
 
 
 

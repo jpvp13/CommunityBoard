@@ -2,6 +2,10 @@
   font-family: 'Readex Pro', sans-serif;
 }
 
+.toolbars-grid{
+  display:grid;
+  grid-template-columns: 1fr 1fr;
+}
 
 .drawingPlace{
   display:flex;
@@ -32,6 +36,40 @@ font-size: 17px;
   color: #2b2b2b;
 }
 
+.toolbar button{
+  cursor:pointer;
+    border-radius: 4px;
+    color:#8b8888;
+    background-color:white;
+    border: 1px solid #8b8888;
+    transition:.3s;
+}
+
+.colorPicker{
+  border:1px solid white;
+}
+
+.bootun{
+  cursor:pointer;
+  border-radius: 4px;
+  color:#8b8888;
+  background-color:white;
+  border: 1px solid #8b8888;
+  transition:.3s;
+}
+
+.toolbar button:hover{
+  color:white;
+  border: 1px solid rgb(236, 41, 41);
+  background-color:rgb(236, 41, 41);
+}
+
+.bootun:hover{
+  color:white;
+  background-color:black;
+}
+
+
 @media screen and (max-height: 450px) {
   .toolbar {padding-top: 15px;}
   .toolbar a {font-size: 18px;}
@@ -40,7 +78,7 @@ font-size: 17px;
 .output{
   font-size: 20px;
   padding:10px;
-  margin-top:7px;
+  margin-top:-9px;
   color: #2b2b2b;
 
 }

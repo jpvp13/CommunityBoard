@@ -24,47 +24,39 @@
       </header>
     </div>
     <div>
+      <div class="merge-forms">
+        <form class="login-form" action="/login">
+          <!-- <form class="login-form" action="/path" method="POST" enctype="application/x-www-form-urlencoded"> -->
+            <fieldset>
+            <div class="login-legend">Login</div>
+            <label class="label">Username</label>
+            <input class="username-input input" name="username" id="username">
+            <label class="label">Password</label>
+            <input type="password" name="pass" class="pass-input input">
+            <div class="grid-login-signup">
+              <div class="login-grid-1 login-button">
+                <button type="submit" formmethod="POST">Log in</button>
 
-      <p id="errorDisplay">
-        {% for i in error %}
-        {{ i }}
-        {% endfor %}
-      </p>
-
-      <form class="login-form" action="/login">
-        <!-- <form class="login-form" action="/path" method="POST" enctype="application/x-www-form-urlencoded"> -->
-        <fieldset>
-          <div class="login-legend">Login</div>
-          <label class="label">Username</label>
-          <input class="username-input input" name="username" id="username">
-          <label class="label">Password</label>
-          <input type="password" name="pass" class="pass-input input">
-          <div class="grid-login-signup">
-            <div class="login-grid-1">
-              <button class="login-button" type="submit" formmethod="POST">Log in</button>
-
-
-
+              </div>
             </div>
-          </div>
 
-          <div class="error"></div>
-        </fieldset>
-      </form>
+            <div class="error"></div>
+          </fieldset>
+        </form>
 
-      <form class="login-form" action="/path" method="GET">
-        <fieldset>
-          <div class="login-grid-2">
-            or <button class="signup-button" type="submit" formmethod="PUT">Sign Up</button>
-          </div>
-
-        </fieldset>
-      </form>
-
+        <form class="signup-button-fix" action="/path" method="GET">
+          <fieldset class="bottom-fieldset-fix">
+            <div class="signup-button" >
+             <p class="no-account">No account?<p><button type="submit" formmethod = "PUT" >Sign Up</button>
+            </div>
+            
+          </fieldset>
+        </form>
+        </div>
     </div>
   </div>
 
-
+ 
 </body>
 
 </html>

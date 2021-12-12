@@ -19,7 +19,7 @@
     border: 1px solid rgb(230, 230, 230);
     border-width:1px;
     background-color: rgb(243, 243, 243);
-    width:95%;
+    width:75%;
     height:23px;
     margin:2px 0px 15px 0px;
     border-radius: 4px;
@@ -80,7 +80,7 @@ fieldset{
 
 
 .login-button button{
-    width:95%;
+    width:75%;
     padding-top:5px;
     padding-bottom:5px;
     font-size:15px;
@@ -99,7 +99,7 @@ fieldset{
 }
 
 .signup-button button{
-    width:95%;
+    width:75%;
     padding-top:5px;
     padding-bottom:5px;
     font-size:15px;

@@ -35,13 +35,6 @@ socketio.on('client_count', (count) => {
   console.log('There are ' + count + ' connected clients.');
 });
 
-// function logout(){
-//   xhttp = new XMLHttpRequest();
-
-//   console.log("I clicked log out")
-//   xhttp.open('POST', "/logout", true);
-// }
-
 pick.onchange = function(){
   color = this.value;
 }
@@ -97,7 +90,9 @@ $(document).ready(function() {
           ctx.closePath();
         }
       }
-    });
+    }
+    
+    );
 
     $('#eraser').on('click',function(e){
       color = 'rgb(242, 242, 242)';

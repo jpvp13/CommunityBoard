@@ -152,6 +152,25 @@ fieldset{
     
 }
 
+.login-button2 button{
+    width:95%;
+    padding-top:5px;
+    padding-bottom:5px;
+    font-size:15px;
+
+    cursor:pointer;
+    border-radius: 4px;
+    color:black;
+    background-color:white;
+    border: 1px solid rgb(60, 226, 218);
+    transition:.3s;
+}
+
+.login-button2 button:hover{
+    background-color:rgb(60, 226, 218);
+    color:white;
+}
+
 
 
 /*  LOBBY SPECIFIC CSS  */

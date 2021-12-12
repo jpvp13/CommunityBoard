@@ -3,6 +3,8 @@ const ctx = canvas.getContext('2d');
 const width = canvas.width = window.innerWidth-50;
 const height = canvas.height = window.innerHeight-50;
 
+const socketio = io();
+
 ctx.fillStyle = 'rgb(242, 242, 242)';
 ctx.fillRect(0,0,width,height);
 
@@ -19,6 +21,16 @@ output.innerHTML = slider.value;
 var color = 'red';
 var thickness = '10';
 
+socketio.on('connect', ()=> {
+  console.log('--connected--');
+})
+socketio.on('disconnect', ()=> {
+  console.log('--disconnected--');
+})
+
+socketio.on('client_count', (count) => {
+  console.log('There are ' + count + ' connected clients.');
+});
 
 // function logout(){
 //   xhttp = new XMLHttpRequest();

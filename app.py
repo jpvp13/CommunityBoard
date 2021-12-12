@@ -14,7 +14,7 @@ from flask_admin.contrib.sqla import ModelView
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_security import Security, SQLAlchemyUserDatastore,  SQLAlchemySessionUserDatastore, UserMixin, RoleMixin, LoginForm, RegisterForm
 from flask_admin import helpers as admin_helpers
-from flask_socketio import SocketIO, send, emit
+from flask_socketio import SocketIO, send, emit, join_room, leave_room
 from sqlalchemy import create_engine
 from sqlalchemy.orm import relationship, backref
 from sqlalchemy import Boolean, DateTime, Column, Integer, String, ForeignKey
@@ -32,14 +32,11 @@ app.config['SECURITY_PASSWORD_SALT'] = '.5\xd1\x01O<!\xd5\xa2\xa0\x9fR'
 app.config['SECURITY_PASSWORD_HASH'] = 'pbkdf2_sha512'
 
 
+app.config ['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///app.db'
+engine = create_engine('sqlite:///app.db', echo = True)
 
-
-
-# app.config ['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://jpvptest:123456789CSE@jpvptest.mysql.pythonanywhere-services.com/jpvptest$mysqlDatabase'
-# engine = create_engine('mysql+pymysql://jpvptest:123456789CSE@jpvptest.mysql.pythonanywhere-services.com/jpvptest$mysqlDatabase', echo = True)
-
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:0000@localhost/newTesting'
-engine = create_engine('mysql+pymysql://root:0000@localhost/newTesting', echo = True)
+# app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:0000@localhost/newTesting'
+# engine = create_engine('mysql+pymysql://root:0000@localhost/newTesting', echo = True)
 
 
 
@@ -47,6 +44,8 @@ engine = create_engine('mysql+pymysql://root:0000@localhost/newTesting', echo = 
 app.config['FLASK_ADMIN_SWATCH'] = 'sandstone'
 
 socketio = SocketIO(app)
+# socket = socketio.Server()
+# app = socketio.WSGIApp(socket)
 
 login_manager = LoginManager(app)
 login_manager.init_app(app)
@@ -243,9 +242,9 @@ def loginPage():
             if current_user.is_authenticated:
                 print("im already authorized!")
                 
-                print("This is the cirrent user: " + str(current_user))
+                print("This is the current user: " + str(current_user))
                 print(current_user.is_authenticated)
-                print("Is current user active?")
+                print("Is the current user active?")
                 print(current_user.is_active)
                 return render_template('whiteboard1.html')
             
@@ -372,11 +371,55 @@ def before_request():
 @socketio.on('my event')
 def handle_my_custom_event(data):
     emit('my response', data, broadcast=True)
+    # print('username->' + current_user.username)
+    # emit('my response', {'message': '{0} has joined'.format(current_user.username)}, broadcast=True)
 
 def some_function():
     socketio.emit('some event', {'data': 42})
+    
+client_count = 0 
+    
+@socketio.on('connect')
+def connected():
+    global client_count
+    client_count += 1
+    print(current_user.username, '--CONNECTED!--')
+    socketio.emit('client_count', client_count)
+    
+@socketio.on('disconnect')
+def disconnected():
+    global client_count
+    client_count -= 1
+    print(current_user.username, '--DISCONNECTED--')
+    socketio.emit('client_count', client_count)
+    
+# @socketio.event
+# def connect(sid, environ):
+#     print(sid, 'connected!!!')
+    
+# @socketio.event
+# def disconnect(sid):
+#     print(sid, 'disconnected!!!')
+    
+# @socketio.on('join')
+# def on_join(data):
+#     username = data['username']
+#     room = data['room']
+#     join_room(room)
+#     send(username + ' has entered the room.', to=room)
+    
+# def websocket_app(environ, start_response):
+#     if environ["PATH_INFO"] == '/echo':
+#         ws = environ["wsgi.websocket"]
+#         message = ws.receive()
+#         ws.send(message)
 
+# @sock.route('/echo')
+# def echo(ws):
+#     while True:
+#         data = ws.receive()
+#         ws.send(data)
 
 if __name__ == '__main__':
-    # socketio.run(app)
-    app.run()
+    socketio.run(app)
+    # app.run()

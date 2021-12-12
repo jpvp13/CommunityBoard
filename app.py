@@ -11,6 +11,7 @@ from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.engine import url,create_engine
 from sqlalchemy.orm import session, sessionmaker, relationship
 from flask_admin.contrib.sqla import ModelView
+from sqlalchemy.sql.functions import user
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_security import Security, SQLAlchemyUserDatastore,  SQLAlchemySessionUserDatastore, UserMixin, RoleMixin, LoginForm, RegisterForm
 from flask_admin import helpers as admin_helpers
@@ -21,7 +22,7 @@ from sqlalchemy import Boolean, DateTime, Column, Integer, String, ForeignKey
 from flask_login import current_user, login_user,login_manager, LoginManager
 from sqlalchemy.orm import scoped_session, sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
-from flask_mysqldb import MySQL
+# from flask_mysqldb import MySQL
 
 
 app = Flask(__name__, static_url_path='', static_folder='')
@@ -38,8 +39,8 @@ app.config['SECURITY_PASSWORD_HASH'] = 'pbkdf2_sha512'
 # app.config ['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://jpvptest:123456789CSE@jpvptest.mysql.pythonanywhere-services.com/jpvptest$mysqlDatabase'
 # engine = create_engine('mysql+pymysql://jpvptest:123456789CSE@jpvptest.mysql.pythonanywhere-services.com/jpvptest$mysqlDatabase', echo = True)
 
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:0000@localhost/newTesting'
-engine = create_engine('mysql+pymysql://root:0000@localhost/newTesting', echo = True)
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:0000@localhost/newDB'
+engine = create_engine('mysql+pymysql://root:0000@localhost/newDB', echo = True)
 
 
 
@@ -91,16 +92,12 @@ class User(db.Model, UserMixin):
     # password = Column(db.String)  #no size specified
     password = Column(db.Text)  #no size specified
 
-    firstName = Column(db.String(255))
-    lastName = Column(db.String(255))
-    last_login_at = Column(DateTime())
-    current_login_at = Column(DateTime())
-    last_login_ip = Column(db.String(100))
-    current_login_ip = Column(db.String(100))
-    login_count = Column(db.Integer())
-    active = Column(db.Boolean())
-    confirmed_at = Column(DateTime())
     roles = relationship('Role', secondary='roles_users', backref=backref('users', lazy='dynamic'))
+
+    def __init__(self, email, username, password):
+        self.email = email
+        self.username = username
+        self.password = password
 
     def is_authenticated(self):
         return True
@@ -158,7 +155,7 @@ def security_context_processor():
     
 #     hashedPassword = generate_password_hash('00')
     
-#     user_datastore.create_user(email='admin@admin.com', username = 'admin', firstName = 'admin', lastName = 'admin', password= hashedPassword)
+#     user_datastore.creainte_user(email='admin@admin.com', username = 'admin', password= hashedPassword)
 #     # db.session.add_all(email='test', username = 'm', firstName = 'John', lastName = 'Villalvazo', password= '11')
 #     db_session.commit()
 #     db_session.close()
@@ -220,7 +217,7 @@ def loginPage():
     elif request.method == 'POST':
         
         USERNAME = request.form.get('username')
-        PASSWORD = request.form.get('pass')
+        PASSWORD = request.form.get('password')
         
 
         hashedPassword = generate_password_hash(PASSWORD)
@@ -243,15 +240,15 @@ def loginPage():
             if current_user.is_authenticated:
                 print("im already authorized!")
                 
-                print("This is the cirrent user: " + str(current_user))
-                print(current_user.is_authenticated)
-                print("Is current user active?")
-                print(current_user.is_active)
-                return render_template('whiteboard1.html')
+            #     print("This is the cirrent user: " + str(current_user))
+            #     print(current_user.is_authenticated)
+            #     print("Is current user active?")
+            #     print(current_user.is_active)
+            #     return render_template('whiteboard1.html')
             
-            print("###############################################")
-            print("The user who is currently logged in")
-            print(current_user)
+            # print("###############################################")
+            # print("The user who is currently logged in")
+            # print(current_user)
             
             login_user(user)
             # return redirect(url_for('lobby'))     #!main place this will redirect to, but can be changed to different places
@@ -285,19 +282,19 @@ def signup():
 
         EMAIL = request.form.get('email')
         USERNAME = request.form.get('username')
-        PASSWORD = request.form.get('pass')
-        FIRSTNAME = request.form.get('firstName')
-        LASTNAME = request.form.get('lastName')
+        PASSWORD = request.form.get('password')
+        # FIRSTNAME = request.form.get('firstName')
+        # LASTNAME = request.form.get('lastName')
         
         hashedPassword = generate_password_hash(PASSWORD)
         print(hashedPassword)
         
                 
-        user = User.query.filter_by(firstName = FIRSTNAME, lastName = LASTNAME,  username = USERNAME, password = hashedPassword, email = EMAIL).first()
+        user = User.query.filter_by(username = USERNAME, password = hashedPassword, email = EMAIL).first()
 
-        if USERNAME == "admin" or USERNAME == "administrator" or USERNAME == "Admin" or USERNAME == "ADMIN":
-                message = "you do not have permission to create a administrator account."
-                return render_template("signup.html", error = message)
+        # if USERNAME == "admin" or USERNAME == "administrator" or USERNAME == "Admin" or USERNAME == "ADMIN":
+        #         message = "you do not have permission to create a administrator account."
+        #         return render_template("signup.html", error = message)
             
             
         if user: #checks to see if user is unique
@@ -309,11 +306,13 @@ def signup():
         else :
             # init_db()
             print("I am attempting to creating a new user now...")
-            user_datastore.create_user(firstName = FIRSTNAME, lastName = LASTNAME,  username = USERNAME, password = hashedPassword, email = EMAIL)
-            db_session.commit()
-            db_session.close()
-            
-            
+            # user_datastore.create_user(username = USERNAME, password = hashedPassword, email = EMAIL)
+            # db_session.commit()
+            # db_session.close()
+            newUser = User(EMAIL, USERNAME, hashedPassword)
+            db.session.add(newUser)
+            db.session.commit()
+            db.session.close()
             
             
             return render_template("welcomePage.html")

@@ -20,13 +20,6 @@ var color = 'red';
 var thickness = '10';
 
 
-// function logout(){
-//   xhttp = new XMLHttpRequest();
-
-//   console.log("I clicked log out")
-//   xhttp.open('POST', "/logout", true);
-// }
-
 pick.onchange = function(){
   color = this.value;
 }
@@ -82,7 +75,9 @@ $(document).ready(function() {
           ctx.closePath();
         }
       }
-    });
+    }
+    
+    );
 
     $('#eraser').on('click',function(e){
       color = 'rgb(242, 242, 242)';

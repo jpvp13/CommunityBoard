@@ -3,7 +3,7 @@ const ctx = canvas.getContext('2d');
 const width = canvas.width = window.innerWidth-50;
 const height = canvas.height = window.innerHeight-50;
 
-const socketio = io();
+var socketio = io.connect('http://localhost:5000');
 
 ctx.fillStyle = 'rgb(242, 242, 242)';
 ctx.fillRect(0,0,width,height);
@@ -14,6 +14,7 @@ var pick = document.getElementById("colorPicker");
 var downloadCanvas = document.querySelector(".download");
 var clear = document.querySelector(".clear");
 var pencil = document.getElementById("pencil");
+
 
 output.innerHTML = slider.value;
 
@@ -67,7 +68,8 @@ $(document).ready(function() {
     var ctx = $canvas[0].getContext('2d');
 
   
-    $canvas.on('mousemove mousedown mouseup mouseout', function(e) {
+    
+      $canvas.on('mousemove mousedown mouseup mouseout', function(e) {
       prevX = currX;
       prevY = currY;
       currX = e.clientX - $canvas.offset().left;
@@ -80,7 +82,32 @@ $(document).ready(function() {
       }
       if (e.type == 'mousemove') {
         if (flag) {
-          ctx.beginPath();
+          draw(prevX,prevY,currX,currY,color,thickness);
+
+          //broadcast and pass drawing variables
+          socketio.emit('Canvas Updated', {
+            prevX: prevX / width,
+            prevY: prevY / height,
+            currX: currX / width,
+            currY: currY/ height,
+            color: color,
+            thickness: thickness
+          });
+        
+        //update the canvas
+        socketio.on('update value',function(msg){
+
+        var w = $canvas.width();
+        var h = $canvas.height();
+
+        draw(msg.prevX*w,msg.prevY*h,msg.currX*w,msg.currY*h,msg.color,msg.thickness);
+            });
+          }
+        }
+      });
+        
+      function draw(prevX,prevY,currX,currY,color,thickness){
+        ctx.beginPath();
           ctx.moveTo(prevX, prevY);
           ctx.lineTo(currX, currY);
           ctx.strokeStyle = color;
@@ -88,24 +115,40 @@ $(document).ready(function() {
           ctx.lineJoin = ctx.lineCap = 'round';
           ctx.stroke();
           ctx.closePath();
-        }
       }
-    }
-    
-    );
+
 
     $('#eraser').on('click',function(e){
       color = 'rgb(242, 242, 242)';
       });
 
-    $('.clear').on('click', function(e) {
-        c_width = $canvas.width();
-        c_height = $canvas.height();
-        ctx.fillStyle = 'rgb(242, 242, 242)';
-        ctx.clearRect(0, 0, c_width, c_height);
-        ctx.fillRect(0, 0, c_width, c_height);
+    $('.clear').on('click',function(e){
+      clearBtn();
+
+      //broadcast that the clear button is clicked
+      socketio.emit('Clear Clicked', {
+        color: 'rgb(242, 242, 242)'
+        });
       });
-  });
+
+    function clearBtn(){
+      c_width = $canvas.width();
+      c_height = $canvas.height();
+      ctx.fillStyle = 'rgb(242, 242, 242)';
+      ctx.clearRect(0, 0, c_width, c_height);
+      ctx.fillRect(0, 0, c_width, c_height);
+      }
+
+      //update canvas
+      socketio.on('update clear',function(msg){
+        var w = $canvas.width();
+        var h = $canvas.height();
+
+        clearBtn(msg.color);
+      });
+
+});
+
 
 
   function openNav() {

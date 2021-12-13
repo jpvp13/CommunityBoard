@@ -431,6 +431,15 @@ def disconnected():
     client_count -= 1
     print(current_user.username, '--DISCONNECTED--')
     socketio.emit('client_count', client_count)
+
+@socketio.on('Canvas Updated')
+def value_changed(message):
+    
+    socketio.emit('update value', message, broadcast=True)
+
+@socketio.on('Clear Clicked')
+def clicked(message):
+    socketio.emit('update clear', message, broadcast=True)
     
 # @socketio.event
 # def connect(sid, environ):
@@ -460,5 +469,5 @@ def disconnected():
 #         ws.send(data)
 
 if __name__ == '__main__':
-    socketio.run(app)
+    socketio.run(app, host='0.0.0.0',cors_allowed_origins="*")
     # app.run()

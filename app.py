@@ -28,8 +28,12 @@ from sqlalchemy.ext.declarative import declarative_base
 app = Flask(__name__, static_url_path='', static_folder='')
 app.config['DEBUG'] = True
 app.config['SECRET_KEY'] = '\xfd{H\xe5<'
-app.config['SECURITY_PASSWORD_SALT'] = '.5\xd1\x01O<!\xd5\xa2\xa0\x9fR'
+# app.config['SECURITY_PASSWORD_SALT'] = '.5\xd1\x01O<!\xd5\xa2\xa0\x9fR'
+app.config['SECURITY_PASSWORD_SALT'] = 'CSE106'
 
+
+
+# app.config['SECURITY_PASSWORD_HASH'] = 'bcrypt'
 app.config['SECURITY_PASSWORD_HASH'] = 'pbkdf2_sha512'
 
 
@@ -41,11 +45,11 @@ engine = create_engine('sqlite:///app.db', echo = True)
 # app.config ['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://jpvptest:123456789CSE@jpvptest.mysql.pythonanywhere-services.com/jpvptest$mysqlDatabase'
 # engine = create_engine('mysql+pymysql://jpvptest:123456789CSE@jpvptest.mysql.pythonanywhere-services.com/jpvptest$mysqlDatabase', echo = True)
 
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:0000@localhost/newDB'
-engine = create_engine('mysql+pymysql://root:0000@localhost/newDB', echo = True)
+# app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:0000@localhost/newDB'
+# engine = create_engine('mysql+pymysql://root:0000@localhost/newDB', echo = True)
 
-# app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///app.db'
-# engine = create_engine('sqlite:///app.db', echo = True)
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///app.db'
+engine = create_engine('sqlite:///app.db', echo = True)
 
 
 # app.config['FLASK_ADMIN_SWATCH'] = 'cerulean'
@@ -222,29 +226,38 @@ def loginPage():
 
     elif request.method == 'POST':
         
+        checkedPassword = False
+        
         USERNAME = request.form.get('username')
         PASSWORD = request.form.get('password')
         
+        user = User.query.filter_by(username = USERNAME).first()
+        
 
-        hashedPassword = generate_password_hash(PASSWORD)
-
-        checkedPassword = check_password_hash(hashedPassword, PASSWORD)
-
-    
-        print("Password match?" + str(checkedPassword))
-        user = User.query.filter_by(username = USERNAME).first() 
+        hashedPassword = generate_password_hash(PASSWORD, method="pbkdf2:sha256", salt_length= 4)
+        checkedPassword = check_password_hash(user.password, PASSWORD)
+        
+        
+        print("#############################################")
+        print("This is the hashed password: " + hashedPassword)
+        print("Password match? " + str(checkedPassword))
 
         # print("The current user is: " + user.username)
         
+        
         if USERNAME == 'admin' and checkedPassword == True:
+            
             login_user(user)
 
             return redirect('/admin')
         
         elif user and checkedPassword == True:
             
+            
             if current_user.is_authenticated:
+                print("The curent user is authorized?  -- " + current_user.is_authorized)
                 print("im already authorized!")
+                return render_template('whiteboard.html')
             
             login_user(user)
             # return redirect(url_for('lobby'))     #!main place this will redirect to, but can be changed to different places
@@ -279,10 +292,10 @@ def signup():
         EMAIL = request.form.get('email')
         USERNAME = request.form.get('username')
         PASSWORD = request.form.get('password')
-        # FIRSTNAME = request.form.get('firstName')
-        # LASTNAME = request.form.get('lastName')
+
         
-        hashedPassword = generate_password_hash(PASSWORD)
+        hashedPassword = generate_password_hash(PASSWORD, method="pbkdf2:sha256", salt_length= 4)
+ 
         print(hashedPassword)
         
                 
@@ -303,6 +316,7 @@ def signup():
         else :
             # init_db()
             print("I am attempting to creating a new user now...")
+            
             # user_datastore.create_user(username = USERNAME, password = hashedPassword, email = EMAIL)
             # db_session.commit()
             # db_session.close()
@@ -322,9 +336,7 @@ def signup():
                 newUser = User.query.filter_by(username = USERNAME, password = hashedPassword, email = EMAIL).first()
                 
                 login_user(newUser)    #since we just push the person into the app after creating a user
-            
-            
-                # return render_template("welcomePage.html")
+         
                 return render_template("whiteboard1.html")
         
             

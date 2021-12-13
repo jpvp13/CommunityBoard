@@ -3,7 +3,6 @@ const ctx = canvas.getContext('2d');
 const width = canvas.width = window.innerWidth-50;
 const height = canvas.height = window.innerHeight-50;
 
-//const socketio = io();
 var socketio = io.connect('http://localhost:5000');
 
 ctx.fillStyle = 'rgb(242, 242, 242)';
@@ -15,6 +14,7 @@ var pick = document.getElementById("colorPicker");
 var downloadCanvas = document.querySelector(".download");
 var clear = document.querySelector(".clear");
 var pencil = document.getElementById("pencil");
+
 
 output.innerHTML = slider.value;
 
@@ -84,8 +84,8 @@ $(document).ready(function() {
         if (flag) {
           draw(prevX,prevY,currX,currY,color,thickness);
 
+          //broadcast and pass drawing variables
           socketio.emit('Canvas Updated', {
-            //who: $(this).attr('id'),
             prevX: prevX / width,
             prevY: prevY / height,
             currX: currX / width,
@@ -93,39 +93,18 @@ $(document).ready(function() {
             color: color,
             thickness: thickness
           });
-        //receiver
-        /*socketio.on('Canvas Updated', function(data){
-          draw(data.prevX,data.prevY,data.currX,data.currY,data.color,data.thickness);
-          console.log("Received!");
-        });*/
         
-        //update
+        //update the canvas
         socketio.on('update value',function(msg){
-        (msg.prevX);
-        (msg.prevY);
-        (msg.currX);
-        (msg.currY);
-        (msg.color);
-        (msg.thickness);
 
         var w = $canvas.width();
         var h = $canvas.height();
 
         draw(msg.prevX*w,msg.prevY*h,msg.currX*w,msg.currY*h,msg.color,msg.thickness);
-
-
-        //console.log('Canvas Updated',msg);
             });
           }
         }
       });
-      /*function receive(data){
-        var w = $canvas.width();
-        var h = $canvas.height();
-        
-        //draw(data.prevX * w, data.prevY* h, data.currX * w, data.currY * h, data.color, data.thickness);
-        draw(data);
-      }*/
         
       function draw(prevX,prevY,currX,currY,color,thickness){
         ctx.beginPath();
@@ -138,49 +117,36 @@ $(document).ready(function() {
           ctx.closePath();
       }
 
-      /*//receiver
-      socketio.on('Canvas Updated',draw);
-
-      //update
-      socketio.on('update value',function(msg){
-        console.log('Canvas Updated',msg);
-        $(msg.prevX)(msg.prevY)(msg.currX)(msg.currY)(msg.color)(msg.thickness);
-      });*/
 
     $('#eraser').on('click',function(e){
       color = 'rgb(242, 242, 242)';
       });
 
-    $('.clear').on('click', function(e) {
-        c_width = $canvas.width();
-        c_height = $canvas.height();
-        ctx.fillStyle = 'rgb(242, 242, 242)';
-        ctx.clearRect(0, 0, c_width, c_height);
-        ctx.fillRect(0, 0, c_width, c_height);
+    $('.clear').on('click',function(e){
+      clearBtn();
+
+      //broadcast that the clear button is clicked
+      socketio.emit('Clear Clicked', {
+        color: 'rgb(242, 242, 242)'
+        });
       });
 
-      /*$('input.canvas').on('canvas', function(event) {
-        console.log("I'm here")
-        socketio.emit('Canvas Updated', {
-          //who: $(this).attr('id'),
-          prevX: prevX / width,
-          prevY: prevY / height,
-          currX: currX / width,
-          currY: currY/ height,
-          color: color,
-          thickness: thickness
-        });
-        return false;
-    });*/
+    function clearBtn(){
+      c_width = $canvas.width();
+      c_height = $canvas.height();
+      ctx.fillStyle = 'rgb(242, 242, 242)';
+      ctx.clearRect(0, 0, c_width, c_height);
+      ctx.fillRect(0, 0, c_width, c_height);
+      }
 
-      socketio.on('after connect', function(msg) {
-        console.log('After connect', msg);
-    });
+      //update canvas
+      socketio.on('update clear',function(msg){
+        var w = $canvas.width();
+        var h = $canvas.height();
 
-    /*socketio.on('update', function(msg) {
-      console.log('Canvas Updated',msg);
-      $(msg.prevX)(msg.prevY)(msg.currX)(msg.currY)(msg.color)(msg.thickness);
-  });*/
+        clearBtn(msg.color);
+      });
+
 });
 
 

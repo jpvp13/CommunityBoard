@@ -395,7 +395,6 @@ def connected():
     client_count += 1
     print(current_user.username, '--CONNECTED!--')
     socketio.emit('client_count', client_count)
-    socketio.emit('after connect',  {'data':'Lets dance'})
     
 @socketio.on('disconnect')
 def disconnected():
@@ -406,8 +405,7 @@ def disconnected():
 
 @socketio.on('Canvas Updated')
 def value_changed(message):
-    #values[message['who']] = message['data']
-    #update_stroke = {}
+    
     socketio.emit('update value', message, broadcast=True)
 
 @socketio.on('Clear Clicked')

@@ -393,15 +393,30 @@ client_count = 0
 def connected():
     global client_count
     client_count += 1
+    print(client_count, 'This is client #')
     print(current_user.username, '--CONNECTED!--')
-    socketio.emit('client_count', client_count)
+    jsonMessage = {
+        'user':current_user.username,
+        'client_count':client_count
+    }
+    print(str(jsonMessage))
+    # socketio.emit('client_count', client_count)
+    socketio.emit('client_count', jsonMessage)
     
 @socketio.on('disconnect')
 def disconnected():
     global client_count
     client_count -= 1
+    
     print(current_user.username, '--DISCONNECTED--')
     socketio.emit('client_count', client_count)
+    
+# @socketio.on('userInformation')
+# def userColor():
+#     global client_count
+#     print('###########################################')
+#     # print('The current users name is' , current_user.username)
+#     socketio.emit('userInfo',current_user.username)
     
 # @socketio.event
 # def connect(sid, environ):
@@ -415,6 +430,7 @@ def disconnected():
 # def on_join(data):
 #     username = data['username']
 #     room = data['room']
+#     print(username, 'TEST######################')
 #     join_room(room)
 #     send(username + ' has entered the room.', to=room)
     

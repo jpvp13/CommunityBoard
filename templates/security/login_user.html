@@ -1,5 +1,4 @@
-
-
+<!DOCTYPE html>
 <!-- {% extends 'admin/master.html' %} -->
 <!-- {% from "security/_macros.html" import render_field_with_errors, render_field %}
 {% block body %}
@@ -15,8 +14,8 @@
           <!-- {{ render_field_with_errors(login_user_form.username) }} -->
 
           <!-- {{ render_field_with_errors(login_user_form.password) }}
-          <!-- {{ render_field(login_user_form.next) }} -->
-          <!-- {{ render_field(login_user_form.submit, class="btn btn- --> -->
+          {{ render_field(login_user_form.next) }} -->
+          <!-- {{ render_field(login_user_form.submit, class="btn btn- -->
              <!-- primary") }} -->
         <!-- </form> -->
         <!-- <p>
@@ -29,51 +28,3 @@
   </div>
 {% endblock %} -->
 
-
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Community Board</title>
-    <script src="templates/static/login.js"></script>
-
-</head>
-<body>
-    <div class = "grid">
-        <div>
-            <header>
-               <h1>Community Board</h1>
-            </header>
-        </div>
-        <div>
-           <section>
-            <!-- <form action="/loginPage" method="POST"> -->
-
-            <form action="/login" method="POST" enctype="application/x-www-form-urlencoded">
-                <fieldset>
-                    <legend>Login</legend>
-                    <div>
-                        <label class="label">Username</label>
-    
-                    </div>
-                    <div>
-                        <input class="username-input" name="username" id="username">
-                    </div>
-    
-                    <div class="label">
-                        <label>Password</label>
-                    </div>
-                    <div>
-                        <input type="password" name="pass" class="pass-input" required>
-                    </div>
-                    <div>
-                        <button type="submit" >Log in </button>
-                    </div>
-                    <div class="error"></div>
-                </fieldset>
-            </form>
-           </section>
-        </div>
-    </div>
-</body>
-</html>

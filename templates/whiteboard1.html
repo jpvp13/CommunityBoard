@@ -25,6 +25,17 @@
 </head>
 <body>
 
+        <div id="myNav" class="overlay">            
+            <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+            <div class="profile-content">
+                <a>
+                    <div class="profile-legend">About Me</div>
+                    <hr>
+                    <span class="profile-info" role="textbox" contenteditable></span>
+                </a>
+            </div>
+        </div>
+
         <div id="drawingToolbar" class="toolbar">
             <a ><i type ="button" class="ri-pencil-line ri-2x" id="pencil"></i></a>
             <a ><i type ="button" class="ri-eraser-line ri-2x" id="eraser"></i></a>
@@ -32,6 +43,9 @@
             <a ><input class="pointSize" id = "pointSize" type="range" min="2" max="50" value="10" ></a>
            <a><div class="output">10</div></a> 
            <a><input type="button" value = "Clear All" class="clear bootun"></a> 
+
+            <a><input type="button" value="My Profile" class="bootun" onclick="openNav()">
+
            <a><input type="button" value = "Download" class ="download bootun" download="image.png" href=""></a>
            <a><form class="login-form" action="/logout">
             <button class="login-button" type="submit" formmethod="POST">Logout</button>

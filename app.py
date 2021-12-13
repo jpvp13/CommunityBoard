@@ -101,13 +101,15 @@ class User(db.Model, UserMixin):
     username = Column(db.String(255), unique = True)
     # password = Column(db.String)  #no size specified
     password = Column(db.Text)  #no size specified
+    bio = Column(db.Text, nullable=True)
 
     roles = relationship('Role', secondary='roles_users', backref=backref('users', lazy='dynamic'))
 
-    def __init__(self, email, username, password):
+    def __init__(self, email, username, password, bio):
         self.email = email
         self.username = username
         self.password = password
+        self.bio = bio
 
     def is_authenticated(self):
         return True
@@ -165,7 +167,7 @@ def security_context_processor():
     
 #     hashedPassword = generate_password_hash('00')
     
-#     user_datastore.creainte_user(email='admin@admin.com', username = 'admin', password= hashedPassword)
+#     user_datastore.create_user(email='admin@admin.com', username = 'admin', password= hashedPassword, bio = "This is the main admin account!")
 #     # db.session.add_all(email='test', username = 'm', firstName = 'John', lastName = 'Villalvazo', password= '11')
 #     db_session.commit()
 #     db_session.close()
@@ -231,8 +233,14 @@ def loginPage():
         USERNAME = request.form.get('username')
         PASSWORD = request.form.get('password')
         
+        print("Im going to check out database")
         user = User.query.filter_by(username = USERNAME).first()
-        
+        print("Nothing came up in the database")
+
+        if not user :
+            print("THIS PERSON DOESNT EXIST")
+            message = "Those inputs were incorrect. Please try again."
+            return render_template("welcomePage.html", error = message)
 
         hashedPassword = generate_password_hash(PASSWORD, method="pbkdf2:sha256", salt_length= 4)
         checkedPassword = check_password_hash(user.password, PASSWORD)
@@ -243,6 +251,7 @@ def loginPage():
         print("Password match? " + str(checkedPassword))
 
         # print("The current user is: " + user.username)
+        
         
         
         if USERNAME == 'admin' and checkedPassword == True:
@@ -262,10 +271,7 @@ def loginPage():
             login_user(user)
             # return redirect(url_for('lobby'))     #!main place this will redirect to, but can be changed to different places
             return render_template('whiteboard1.html')
-        else :
-            print("IM CHECKING IF THAT PERSON EXISTS?")
-            message = "FIX ME, I AM UNREADABLE"
-            return render_template("welcomePage.html", error = message)
+        
             # return "<p> Incorrect credentials, please try again</p>"
             
         
@@ -298,36 +304,47 @@ def signup():
  
         print(hashedPassword)
         
-                
+        #initial check to see if user with same info exsists
         user = User.query.filter_by(username = USERNAME, password = hashedPassword, email = EMAIL).first()
 
-        if USERNAME == "admin" or USERNAME == "administrator" or USERNAME == "Admin" or USERNAME == "ADMIN":
-            print("uhh u cant do that")
-            message = "you do not have permission to create a administrator account."
-            return render_template("signup.html", error = message)
+
+        #checking to see if user is attempting to make a admin account
+        # if USERNAME == "admin" or USERNAME == "administrator" or USERNAME == "Admin" or USERNAME == "ADMIN":
+        #     print("uhh u cant do that")
+        #     message = "you do not have permission to create a administrator account."
+        #     return render_template("signup.html", error = message)
             
             
-        if user: #checks to see if user is unique
+        if user: #checks to see if user is unique, errors out by saying username must be unique
             print('AHHHHHHHHHHHH')
         
-            # message = "This username already exists. Please enter a different username"
-            message = "FIX ME, I AM UNREADABLE"
+            message = "This username already exists. Please enter a different username"
+            # message = "FIX ME, I AM UNREADABLE"
             return render_template("signup.html", error = message)
         else :
-            # init_db()
+            
             print("I am attempting to creating a new user now...")
             
-            # user_datastore.create_user(username = USERNAME, password = hashedPassword, email = EMAIL)
-            # db_session.commit()
-            # db_session.close()
-            
+            #since username is only unique value, then we check again in case something changes while transiitoning from login->signup
             checkingUser = User.query.filter_by(username = USERNAME).first()
-            if checkingUser:
-                return ("This username already exists")
             
+            #check to see if user is attempting to make a username with no characters
+            if len(USERNAME) == 0:
+                print('attempting to make a user with no info')
+                message = "You must enter a valid username longer than zero characters. Please enter a different username"
+                # message = "FIX ME, I AM UNREADABLE"
+                return render_template("signup.html", error = message)
+            
+            elif checkingUser:
+                message = "This username already exists. Please enter a different username"
+                # message = "FIX ME, I AM UNREADABLE"
+                return render_template("signup.html", error = message)
+                # return "<p> This username already exists. Please enter a different username. </p>"
+                
             else:
+            
                 # newUser = User(EMAIL, USERNAME, hashedPassword)
-                db.session.add(User(EMAIL, USERNAME, hashedPassword))
+                db.session.add(User(EMAIL, USERNAME, hashedPassword, None))
                 db.session.commit()
                 db.session.close()
             

@@ -9,7 +9,7 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@2.5.0/fonts/remixicon.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Readex+Pro&display=swap" rel="stylesheet"> 
+  <link href="https://fonts.googleapis.com/css2?family=Readex+Pro&display=swap" rel="stylesheet">
 
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.0/jquery.min.js"></script>
@@ -27,7 +27,7 @@
       <div class="merge-forms">
         <form class="login-form" action="/login">
           <!-- <form class="login-form" action="/path" method="POST" enctype="application/x-www-form-urlencoded"> -->
-            <fieldset>
+          <fieldset>
             <div class="login-legend">Login</div>
             <label class="label">Username</label>
             <input class="username-input input" name="username" id="username">
@@ -40,23 +40,25 @@
               </div>
             </div>
 
-            <div class="error"></div>
+            <div id="error-message">
+              {{ error }}
+            </div>
           </fieldset>
         </form>
 
         <form class="signup-button-fix" action="/path" method="GET">
           <fieldset class="bottom-fieldset-fix">
-            <div class="signup-button" >
-             <p class="no-account">No account?</p><button type="submit" formmethod = "PUT" >Sign Up</button>
+            <div class="signup-button">
+              <p class="no-account">No account?</p><button type="submit" formmethod="PUT">Sign Up</button>
             </div>
-            
+
           </fieldset>
         </form>
-        </div>
+      </div>
     </div>
   </div>
 
- 
+  
 </body>
 
 </html>

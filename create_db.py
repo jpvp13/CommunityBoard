@@ -12,7 +12,7 @@ my_cursor = mydb.cursor()
 
 
 
-my_cursor.execute("CREATE DATABASE newTesting")
+my_cursor.execute("CREATE DATABASE newDB")
 
 # my_cursor.execute("SHOW DATBASES")
 for db in my_cursor:

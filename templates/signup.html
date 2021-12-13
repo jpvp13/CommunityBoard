@@ -1,140 +1,42 @@
 <!DOCTYPE html>
-
-<!DOCTYPE html>
 <html lang="en">
 
     <head>
         <meta charset="UTF-8">
-        <title>Community Board</title>
-        <script src="templates/static/signup.js"></script>
-
-        <link href="templates/static/signup.css" rel="stylesheet" />
-        <link rel="preconnect" href="https://fonts.googleapis.com">
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <title>Signup</title>
+        <link href="templates/static/CommunityBoard.css" rel="stylesheet">
+        <link rel="preconnect" href="https://fonts.googleapis.com/%22%3E">
+        <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Readex+Pro&display=swap" rel="stylesheet">
 
     </head>
 
     <div class="grid">
-        <div>
-            <header>
-                <h1>Community Board</h1>
-            </header>
-        </div>
-
         <body>
 
-            <div class="container">
+            <div>
+                <form class="signup-form" action="/signup">
+                    <fieldset class="registration-fieldset">
+                        <div class="login-legend">Register and Login</div>
+                        <label>Email</label>
+                        <input class="input2" name = "email">
 
-                
+                        <label>Username</label>
+                        <input class="input2" name = "username">
 
-                <form class="well form-horizontal" action="/signup" method="POST" id="contact_form">
-                    <fieldset>
-
-                        <!-- Form Name -->
-                        <legend>
-                            <center>
-                                <h2><b>Registration Form</b></h2>
-                            </center>
-                        </legend><br>
-
-                        
-
-                        <!-- Text input-->
-
-                        <div class="form-group">
-                            <label class="col-md-4 control-label">First Name</label>
-                            <div class="col-md-4 inputGroupContainer">
-                                <div class="input-group">
-                                    <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
-                                    <input name="firstName" class="form-control" type="text">
-                                </div>
-                            </div>
+                        <label>Password</label>
+                        <input class="input2" type="password" name = "password">
+                        <div class="login-button2"><button type="submit" formmethod="POST">Sign Up</button>
                         </div>
-
-                        <!-- Text input-->
-
-                        <div class="form-group">
-                            <label class="col-md-4 control-label">Last Name</label>
-                            <div class="col-md-4 inputGroupContainer">
-                                <div class="input-group">
-                                    <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
-                                    <input name="lastName" class="form-control" type="text">
-                                </div>
-                            </div>
-                        </div>
-
-
-                        <div class="form-group">
-                            <label class="col-md-4 control-label">Username</label>
-                            <div class="col-md-4 inputGroupContainer">
-                                <div class="input-group">
-                                    <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
-                                    <input name="username" class="form-control" type="text">
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Text input-->
-
-                        <div class="form-group">
-                            <label class="col-md-4 control-label">Password</label>
-                            <div class="col-md-4 inputGroupContainer">
-                                <div class="input-group">
-                                    <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
-                                    <input name="pass" class="form-control" type="password">
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Text input-->
-                        <div class="form-group">
-                            <label class="col-md-4 control-label">E-Mail</label>
-                            <div class="col-md-4 inputGroupContainer">
-                                <div class="input-group">
-                                    <span class="input-group-addon"><i class="glyphicon glyphicon-envelope"></i></span>
-                                    <input name="email" class="form-control" type="text">
-                                </div>
-                            </div>
-                        </div>
-
-
-                        <!-- Select Basic -->
-
-                        <!-- Success message -->
-                        <div class="alert alert-success" role="alert" id="success_message">Success <i
-                                class="glyphicon glyphicon-thumbs-up"></i> Success!.
-                        </div>
-
-                        <!-- Button -->
-                        <button class="login-button" type="submit" >Submit</button>
-
-                        <!-- <div class="form-group">
-                            <label class="col-md-4 control-label"></label>
-                            <div class="col-md-4"><br>
-                                &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<button
-                                    type="submit" class="btn btn-warning">&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbspSUBMIT
-                                    <span
-                                        class="glyphicon glyphicon-send"></span>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</button>
-                            </div>
-                        </div> -->
 
                     </fieldset>
                 </form>
-                
-                
-            </div><!-- /.container -->
+             </div>
 
-            
 
-            <script src="templates/static/signup.js"></script>
+
+             <script src="templates/static/signup.js"></script>
 
         </body>
-    </div>
-
-    <div id = "errorDisplay">
-        {% for i in error %}
-        {{ i }}
-        {% endfor %}
     </div>
 </html>

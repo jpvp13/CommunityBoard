@@ -25,20 +25,16 @@ var thickness = '10';
 socketio.on('connect', ()=> {
   console.log('--connected--');
 })
+
+
 socketio.on('disconnect', ()=> {
   console.log('--disconnected--');
 })
 
 socketio.on('client_count', (count) => {
+  document.getElementById("totalUsers").innerHTML = count + " drawers active";
   console.log('There are ' + count + ' connected clients.');
 });
-
-// function logout(){
-//   xhttp = new XMLHttpRequest();
-
-//   console.log("I clicked log out")
-//   xhttp.open('POST', "/logout", true);
-// }
 
 pick.onchange = function(){
   color = this.value;
@@ -143,6 +139,7 @@ $(document).ready(function() {
           ctx.stroke();
           ctx.closePath();
       }
+<<<<<<< HEAD
 
       /*//receiver
       socketio.on('Canvas Updated',draw);
@@ -152,6 +149,11 @@ $(document).ready(function() {
         console.log('Canvas Updated',msg);
         $(msg.prevX)(msg.prevY)(msg.currX)(msg.currY)(msg.color)(msg.thickness);
       });*/
+=======
+    }
+    
+    );
+>>>>>>> ae1581765088e3f1559929d1738fa58ece634f11
 
     $('#eraser').on('click',function(e){
       color = 'rgb(242, 242, 242)';

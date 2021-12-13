@@ -21,7 +21,7 @@ from sqlalchemy import Boolean, DateTime, Column, Integer, String, ForeignKey
 from flask_login import current_user, login_user,login_manager, LoginManager
 from sqlalchemy.orm import scoped_session, sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
-from flask_mysqldb import MySQL
+#from flask_mysqldb import MySQL
 
 
 app = Flask(__name__, static_url_path='', static_folder='')
@@ -385,6 +385,7 @@ def connected():
     client_count += 1
     print(current_user.username, '--CONNECTED!--')
     socketio.emit('client_count', client_count)
+    socketio.emit('after connect',  {'data':'Lets dance'})
     
 @socketio.on('disconnect')
 def disconnected():
@@ -392,6 +393,12 @@ def disconnected():
     client_count -= 1
     print(current_user.username, '--DISCONNECTED--')
     socketio.emit('client_count', client_count)
+
+@socketio.on('Canvas Updated')
+def value_changed(message):
+    #values[message['who']] = message['data']
+    #update_stroke = {}
+    socketio.emit('update value', message, broadcast=True)
     
 # @socketio.event
 # def connect(sid, environ):
@@ -421,5 +428,5 @@ def disconnected():
 #         ws.send(data)
 
 if __name__ == '__main__':
-    socketio.run(app)
+    socketio.run(app, host='0.0.0.0',cors_allowed_origins="*")
     # app.run()

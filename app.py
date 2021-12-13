@@ -264,9 +264,9 @@ def loginPage():
             
             
             if current_user.is_authenticated:
-                print("The curent user is authorized?  -- " + current_user.is_authorized)
+                # print("The curent user is authorized?  -- " + current_user.is_authorized)
                 print("im already authorized!")
-                return render_template('whiteboard.html')
+                return render_template('whiteboard1.html')
             
             login_user(user)
             # return redirect(url_for('lobby'))     #!main place this will redirect to, but can be changed to different places

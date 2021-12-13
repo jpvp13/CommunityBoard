@@ -139,7 +139,6 @@ $(document).ready(function() {
           ctx.stroke();
           ctx.closePath();
       }
-<<<<<<< HEAD
 
       /*//receiver
       socketio.on('Canvas Updated',draw);
@@ -149,11 +148,6 @@ $(document).ready(function() {
         console.log('Canvas Updated',msg);
         $(msg.prevX)(msg.prevY)(msg.currX)(msg.currY)(msg.color)(msg.thickness);
       });*/
-=======
-    }
-    
-    );
->>>>>>> ae1581765088e3f1559929d1738fa58ece634f11
 
     $('#eraser').on('click',function(e){
       color = 'rgb(242, 242, 242)';

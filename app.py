@@ -239,7 +239,7 @@ def loginPage():
 
         if not user :
             print("THIS PERSON DOESNT EXIST")
-            message = "Those inputs were incorrect. Please try again."
+            message = "Incorrect username or password"
             return render_template("welcomePage.html", error = message)
 
         hashedPassword = generate_password_hash(PASSWORD, method="pbkdf2:sha256", salt_length= 4)
@@ -309,16 +309,16 @@ def signup():
 
 
         #checking to see if user is attempting to make a admin account
-        # if USERNAME == "admin" or USERNAME == "administrator" or USERNAME == "Admin" or USERNAME == "ADMIN":
-        #     print("uhh u cant do that")
-        #     message = "you do not have permission to create a administrator account."
-        #     return render_template("signup.html", error = message)
+        if USERNAME == "admin" or USERNAME == "administrator" or USERNAME == "Admin" or USERNAME == "ADMIN":
+             print("uhh u cant do that")
+             message = "invalid input"
+             return render_template("signup.html", error = message)
             
             
         if user: #checks to see if user is unique, errors out by saying username must be unique
             print('AHHHHHHHHHHHH')
         
-            message = "This username already exists. Please enter a different username"
+            message = "This username already exists"
             # message = "FIX ME, I AM UNREADABLE"
             return render_template("signup.html", error = message)
         else :
@@ -331,12 +331,12 @@ def signup():
             #check to see if user is attempting to make a username with no characters
             if len(USERNAME) == 0:
                 print('attempting to make a user with no info')
-                message = "You must enter a valid username longer than zero characters. Please enter a different username"
+                message = "Enter a username"
                 # message = "FIX ME, I AM UNREADABLE"
                 return render_template("signup.html", error = message)
             
             elif checkingUser:
-                message = "This username already exists. Please enter a different username"
+                message = "This username already exists"
                 # message = "FIX ME, I AM UNREADABLE"
                 return render_template("signup.html", error = message)
                 # return "<p> This username already exists. Please enter a different username. </p>"

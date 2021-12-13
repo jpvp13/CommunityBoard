@@ -22,11 +22,7 @@ from sqlalchemy import Boolean, DateTime, Column, Integer, String, ForeignKey
 from flask_login import current_user, login_user,login_manager, LoginManager
 from sqlalchemy.orm import scoped_session, sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
-<<<<<<< HEAD
-#from flask_mysqldb import MySQL
-=======
 # from flask_mysqldb import MySQL
->>>>>>> ae1581765088e3f1559929d1738fa58ece634f11
 
 
 app = Flask(__name__, static_url_path='', static_folder='')
@@ -45,11 +41,11 @@ engine = create_engine('sqlite:///app.db', echo = True)
 # app.config ['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://jpvptest:123456789CSE@jpvptest.mysql.pythonanywhere-services.com/jpvptest$mysqlDatabase'
 # engine = create_engine('mysql+pymysql://jpvptest:123456789CSE@jpvptest.mysql.pythonanywhere-services.com/jpvptest$mysqlDatabase', echo = True)
 
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:0000@localhost/newDB'
-engine = create_engine('mysql+pymysql://root:0000@localhost/newDB', echo = True)
+# app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:0000@localhost/newDB'
+# engine = create_engine('mysql+pymysql://root:0000@localhost/newDB', echo = True)
 
-# app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///app.db'
-# engine = create_engine('sqlite:///app.db', echo = True)
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///app.db'
+engine = create_engine('sqlite:///app.db', echo = True)
 
 
 # app.config['FLASK_ADMIN_SWATCH'] = 'cerulean'
@@ -413,6 +409,10 @@ def value_changed(message):
     #values[message['who']] = message['data']
     #update_stroke = {}
     socketio.emit('update value', message, broadcast=True)
+
+@socketio.on('Clear Clicked')
+def clicked(message):
+    socketio.emit('update clear', message, broadcast=True)
     
 # @socketio.event
 # def connect(sid, environ):

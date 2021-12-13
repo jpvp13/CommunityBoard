@@ -82,17 +82,7 @@ $(document).ready(function() {
       }
       if (e.type == 'mousemove') {
         if (flag) {
-          //data = JSON.parse(prevX,prevY,currX,currY,color,thickness);
           draw(prevX,prevY,currX,currY,color,thickness);
-          /*ctx.beginPath();
-          ctx.moveTo(prevX, prevY);
-          ctx.lineTo(currX, currY);
-          ctx.strokeStyle = color;
-          ctx.lineWidth = thickness;
-          ctx.lineJoin = ctx.lineCap = 'round';
-          ctx.stroke();
-          ctx.closePath();*/
-
 
           socketio.emit('Canvas Updated', {
             //who: $(this).attr('id'),
@@ -103,20 +93,28 @@ $(document).ready(function() {
             color: color,
             thickness: thickness
           });
-
         //receiver
-        socketio.on('Canvas Updated',draw);
-
+        /*socketio.on('Canvas Updated', function(data){
+          draw(data.prevX,data.prevY,data.currX,data.currY,data.color,data.thickness);
+          console.log("Received!");
+        });*/
+        
         //update
         socketio.on('update value',function(msg){
-        console.log('Canvas Updated',msg);
         (msg.prevX);
         (msg.prevY);
         (msg.currX);
         (msg.currY);
         (msg.color);
         (msg.thickness);
-        console.log("I'm working!");
+
+        var w = $canvas.width();
+        var h = $canvas.height();
+
+        draw(msg.prevX*w,msg.prevY*h,msg.currX*w,msg.currY*h,msg.color,msg.thickness);
+
+
+        //console.log('Canvas Updated',msg);
             });
           }
         }
@@ -161,7 +159,8 @@ $(document).ready(function() {
         ctx.fillRect(0, 0, c_width, c_height);
       });
 
-      /*$('input.sync').on('canvas', function(event) {
+      /*$('input.canvas').on('canvas', function(event) {
+        console.log("I'm here")
         socketio.emit('Canvas Updated', {
           //who: $(this).attr('id'),
           prevX: prevX / width,

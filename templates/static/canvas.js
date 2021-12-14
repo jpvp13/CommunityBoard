@@ -60,6 +60,7 @@ downloadCanvas.onclick = function() {
     document.body.removeChild( tmpLink ); 
 };
 
+//create function to populate profile on load
 
 $(document).ready(function() {
     var flag, dot_flag = false,
@@ -152,9 +153,22 @@ $(document).ready(function() {
 
 
   function openNav() {
-    document.getElementById("myNav").style.width = "25%";
+  document.getElementById("myNav").style.width = "25%";
   }
   
   function closeNav() {
     document.getElementById("myNav").style.width = "0%";
+  }
+
+
+  async function updateBio(/*username, bio*/){
+    /*fetch('bio',{
+      headers:{"content-type":"application/json"},
+      method:"PUT",
+      body: JSON.stringify({
+        username:username,
+        bio:bio
+      })
+    });
+    */
   }

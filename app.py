@@ -264,19 +264,24 @@ def loginPage():
             
             
             if current_user.is_authenticated:
-                # print("The curent user is authorized?  -- " + current_user.is_authorized)
+                # print("The curent user is authorized?  -- " + current_user.is_authorized) 
+                # make a call to db and also return profile info
+                userData = {}
+                userInfo = User.query.filter_by(username = USERNAME).first() #get bio information here
+                userData.update({userInfo.username:userInfo.bio})
                 print("im already authorized!")
-                return render_template('whiteboard1.html')
+                return render_template('whiteboard1.html', userData)
+                #return render_template('whiteboard1.html')
             
             login_user(user)
-            # return redirect(url_for('lobby'))     #!main place this will redirect to, but can be changed to different places
+            # return redirect(url_for('lobby'))     #!main place this will redirect to, but can be changed to different places | make a call to db and also return profile info
             return render_template('whiteboard1.html')
         
             # return "<p> Incorrect credentials, please try again</p>"
             
         
         
-    # return redirect(url_for('login'))
+    # return redirect(url_for('login')) 
     return render_template('welcomePage.html')
 
 #~ this code block is used to sign a user up to our app (aka adding their info to our db). This will take in any info we want, but

@@ -103,7 +103,7 @@ class User(db.Model, UserMixin):
     username = Column(db.String(255), unique = True)
     # password = Column(db.String)  #no size specified
     password = Column(db.Text)  #no size specified
-    bio = Column(db.Text, nullable=True)
+    bio = Column(db.Text)
 
     roles = relationship('Role', secondary='roles_users', backref=backref('users', lazy='dynamic'))
 
@@ -270,13 +270,16 @@ def loginPage():
                 print("username is " + str(current_user.username))
                 print("Users bio is  " + str(current_user.bio))
                 print("im already authorized!")
+                print("#########################################################################")
                 # return render_template('whiteboard1.html', current_user.username)
-                return render_template('whiteboard1.html')
+                return render_template('whiteboard1.html', userData = current_user.username, userBio = current_user.bio)
             
             login_user(user)
             #authUsers(user)
             # return redirect(url_for('lobby'))     #!main place this will redirect to, but can be changed to different places | make a call to db and also return profile info
-            return render_template('whiteboard1.html')
+            # return render_template('whiteboard1.html')
+            return render_template('whiteboard1.html', userData = current_user.username, userBio = current_user.bio)
+
         
             # return "<p> Incorrect credentials, please try again</p>"
             
@@ -357,7 +360,7 @@ def signup():
             else:
             
                 # newUser = User(EMAIL, USERNAME, hashedPassword)
-                db.session.add(User(EMAIL, USERNAME, hashedPassword, None))
+                db.session.add(User(EMAIL, USERNAME, hashedPassword, ""))
                 db.session.commit()
                 db.session.close()
             
@@ -367,7 +370,7 @@ def signup():
                 
                 login_user(newUser)    #since we just push the person into the app after creating a user
          
-                return render_template("whiteboard1.html")
+                return render_template("whiteboard1.html",  userData = current_user.username, userBio = current_user.bio)
         
             
             

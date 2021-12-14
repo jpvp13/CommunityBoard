@@ -31,7 +31,9 @@
                 <a>
                     <div class="profile-legend" id="user-name">About {{ userData }}</div>
                     <hr>
-                    <span class="profile-info" id="profile-info" role="textbox"contenteditable onblur="updateBio('username',this.value)"></span>
+                    <span class="profile-info" id="profile-info" role="textbox"contenteditable onblur="updateBio('username',this.value)"> 
+                        {{ userBio }}  
+                    </span>
                 </a>
             </div>
         </div>
@@ -44,7 +46,7 @@
            <a><div class="output">10</div></a> 
            <a><input type="button" value = "Clear All" class="clear bootun"></a> 
 
-            <a><input type="button" value="My Profile" class="bootun" onclick="openNav()">
+            <a><input type="button" value="My Profile" class="bootun" onclick="openNav()"></a>
 
            <a><input type="button" value = "Download" class ="download bootun" download="image.png" href=""></a>
            <a><form class="login-form" action="/logout">

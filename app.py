@@ -385,10 +385,16 @@ def lobby():
     return render_template('lobby.html')
 
 #* this code is similar to the '/lobby' route, but was just meant to test to make sure a user was authenticated
-@app.route('/testing')
+@app.route('/bio', methods=['PUT'])
 @login_required
-def testing():
-    return "Hi just testing this!"
+def updateBio():
+    req = request.get_json()
+    user = req["user"]
+    user_bio = req["bio"]
+
+    edit_bio = Users.query.filter_by(username = user).update(bio = user_bio)
+    User.session.commit()
+    return 
     # return render_template('lobby.html')
 
 #& required code to help flask-login work
@@ -408,11 +414,6 @@ def unauthorized_handler():
 def before_request():
     g.user = current_user
 
-@app.route('/bio', methods =['GET'])
-def getBio():
-    user = User.query.filter_by(username = current_user.username).first()
-    data = {'username':user.username, 'bio':user.bio}
-    return data
 
 #########################################################
 ###### SocketIO Stuff#########

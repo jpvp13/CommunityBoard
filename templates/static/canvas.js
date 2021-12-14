@@ -161,29 +161,18 @@ $(document).ready(function() {
   }
 
 
-  async function updateBio(/*username, bio*/){
-    /*fetch('bio',{
+  async function updateBio(){
+    var userData = document.getElementById("user-name").innerHTML
+    var userBio = document.getElementById("profile-info").innerHTML
+    console.log("userData = " +userData + " | userBio = "+ userBio)
+    
+    fetch('bio',{
       headers:{"content-type":"application/json"},
-      method:"PUT",
+      method: "PUT",
       body: JSON.stringify({
-        username:username,
-        bio:bio
+        user:userData, 
+        bio:userBio
       })
     });
-    */
-  }
 
-  async function init(){
-    let userhtml=document.getElementById("user-name");
-    let biohtml=document.getElementById("profile-info");
-    fetch("bio",{method:"GET"})
-      .then((response)=>{
-        return response.json();
-      })
-      .then((data)=>{
-        userhtml = '${data.username}';
-        biohtml = '${data.bio}';
-      });
   }
-
-  init();

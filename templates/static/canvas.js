@@ -3,7 +3,7 @@ const ctx = canvas.getContext('2d');
 const width = canvas.width = window.innerWidth-50;
 const height = canvas.height = window.innerHeight-50;
 
-var socketio = io.connect('http://localhost:5000');
+var socketio = io.connect('/');
 
 ctx.fillStyle = 'rgb(242, 242, 242)';
 ctx.fillRect(0,0,width,height);
@@ -172,3 +172,18 @@ $(document).ready(function() {
     });
     */
   }
+
+  async function init(){
+    let userhtml=document.getElementById("user-name");
+    let biohtml=document.getElementById("profile-info");
+    fetch("bio",{method:"GET"})
+      .then((response)=>{
+        return response.json();
+      })
+      .then((data)=>{
+        userhtml = '${data.username}';
+        biohtml = '${data.bio}';
+      });
+  }
+
+  init();

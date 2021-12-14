@@ -29,9 +29,9 @@
             <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
             <div class="profile-content">
                 <a>
-                    <div class="profile-legend">About {{ username }}</div>
+                    <div class="profile-legend" id="user-name">About {{ userData }}</div>
                     <hr>
-                    <span class="profile-info" id="profile-info" role="textbox" contenteditable onblur="updateBio('username',this.value)">{{ bio }}</span>
+                    <span class="profile-info" id="profile-info" role="textbox"contenteditable onblur="updateBio('username',this.value)"></span>
                 </a>
             </div>
         </div>

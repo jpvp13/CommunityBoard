@@ -1,3 +1,4 @@
+import json
 from logging import error
 from typing import Text
 from flask import Flask, redirect, url_for, request,render_template, json, flash, g
@@ -150,7 +151,7 @@ admin = Admin(app, name='Dashboard', template_mode='bootstrap3', index_view= Adm
 admin.add_view(AdminView(RolesUsers, db_session))
 admin.add_view(AdminView(Role, db_session))
 admin.add_link(MenuLink(name='logout', category='', url="/logout"))
-
+userData = {}
 
 
 @security.context_processor
@@ -263,22 +264,17 @@ def loginPage():
         
         elif user and checkedPassword == True:
             
-            
             if current_user.is_authenticated:
                 # print("The curent user is authorized?  -- " + current_user.is_authorized) 
-                # make a call to db and also return profile info
-                # userData = {}
-                # userInfo = User.query.filter_by(username = USERNAME).first() #get bio information here
-                
-                # userData = {user.username:user.bio}
+                #authUsers(current_user)
                 print("username is " + str(current_user.username))
                 print("Users bio is  " + str(current_user.bio))
-                # userData.update({userInfo.username:userInfo.bio})
                 print("im already authorized!")
                 # return render_template('whiteboard1.html', current_user.username)
                 return render_template('whiteboard1.html')
             
             login_user(user)
+            #authUsers(user)
             # return redirect(url_for('lobby'))     #!main place this will redirect to, but can be changed to different places | make a call to db and also return profile info
             return render_template('whiteboard1.html')
         
@@ -288,6 +284,13 @@ def loginPage():
         
     # return redirect(url_for('login')) 
     return render_template('welcomePage.html')
+
+@login_required
+def authUsers(user):
+    print("username is " + str(user.username))
+    print("Users bio is  " + str(user.bio))
+    userData = {current_user.username : current_user.bio}
+    return render_template('whiteboard1.html', userData = userData)
 
 #~ this code block is used to sign a user up to our app (aka adding their info to our db). This will take in any info we want, but
 #~ as a testing purpose i used the below. After this, the users entered password is hashed using werkzeug.security module which takes care of
@@ -402,6 +405,11 @@ def unauthorized_handler():
 def before_request():
     g.user = current_user
 
+@app.route('/bio', methods =['GET'])
+def getBio():
+    user = User.query.filter_by(username = current_user.username).first()
+    data = {'username':user.username, 'bio':user.bio}
+    return data
 
 #########################################################
 ###### SocketIO Stuff#########

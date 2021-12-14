@@ -24,6 +24,7 @@ from sqlalchemy import Boolean, DateTime, Column, Integer, String, ForeignKey
 from flask_login import current_user, login_user,login_manager, LoginManager
 from sqlalchemy.orm import scoped_session, sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy import update
 # from flask_mysqldb import MySQL
 
 
@@ -361,10 +362,18 @@ def signup():
             
                 # newUser = User(EMAIL, USERNAME, hashedPassword)
                 db.session.add(User(EMAIL, USERNAME, hashedPassword, ""))
+                
+                
+                
+                
                 db.session.commit()
-                db.session.close()
+                
+                
+                # edit_bio = User.query.filter_by(username = USERNAME).update().value(bio = "TESTINGGGG")
+                # User.session.commit(edit_bio)
             
                 print("New user has been created")
+                db.session.close()
                 
                 newUser = User.query.filter_by(username = USERNAME, password = hashedPassword, email = EMAIL).first()
                 
@@ -384,18 +393,21 @@ def signup():
 def lobby():
     return render_template('lobby.html')
 
-#* this code is similar to the '/lobby' route, but was just meant to test to make sure a user was authenticated
 @app.route('/bio', methods=['PUT'])
 @login_required
 def updateBio():
     req = request.get_json()
     user = req["user"]
     user_bio = req["bio"]
-
-    edit_bio = Users.query.filter_by(username = user).update(bio = user_bio)
-    User.session.commit()
-    return 
-    # return render_template('lobby.html')
+    
+    conn = engine.connect()
+    text = update(User).where(User.username == user).values(bio = user_bio)
+    conn.execute(text)
+    
+    conn.close()
+    
+    
+    return '200'
 
 #& required code to help flask-login work
 @login_manager.user_loader

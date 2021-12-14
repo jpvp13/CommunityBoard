@@ -1,3 +1,4 @@
+from logging import error
 from typing import Text
 from flask import Flask, redirect, url_for, request,render_template, json, flash, g
 # from flask.globals import current_app
@@ -266,12 +267,16 @@ def loginPage():
             if current_user.is_authenticated:
                 # print("The curent user is authorized?  -- " + current_user.is_authorized) 
                 # make a call to db and also return profile info
-                userData = {}
-                userInfo = User.query.filter_by(username = USERNAME).first() #get bio information here
-                userData.update({userInfo.username:userInfo.bio})
+                # userData = {}
+                # userInfo = User.query.filter_by(username = USERNAME).first() #get bio information here
+                
+                # userData = {user.username:user.bio}
+                print("username is " + str(current_user.username))
+                print("Users bio is  " + str(current_user.bio))
+                # userData.update({userInfo.username:userInfo.bio})
                 print("im already authorized!")
-                return render_template('whiteboard1.html', userData)
-                #return render_template('whiteboard1.html')
+                # return render_template('whiteboard1.html', current_user.username)
+                return render_template('whiteboard1.html')
             
             login_user(user)
             # return redirect(url_for('lobby'))     #!main place this will redirect to, but can be changed to different places | make a call to db and also return profile info

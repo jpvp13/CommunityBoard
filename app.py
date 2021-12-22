@@ -224,9 +224,6 @@ def path():
 #! else if none of these checks are met, it will just return user to the login page
 @app.route('/login', methods = ['POST', 'PUT'])
 def loginPage():
-    
-    if request.method == 'GET':
-        return Null
 
     if request.method == 'PUT':
         print('signup here')

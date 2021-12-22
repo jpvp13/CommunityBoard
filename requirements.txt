@@ -1,85 +1,85 @@
-# alchemy
-# alembic
-# aniso8601
-# atomicwrites
-# attrs
-# Babel
-# bcrypt
-# bidict
-# blinker
-# certifi
-# cffi
-# chardet
-# charset-normalizer
-# click
-# colorama
-# cryptography
-# cycler
-# dnspython
-# docutils
-# email-validator
-# Faker
-# filelock
-# Flask
-# Flask-Admin
-# Flask-BabelEx
-# Flask-Bcrypt
-# Flask-Caching
-# Flask-HTTPAuth
-# Flask-Login
-# Flask-Mail
-# flask-marshmallow
-# Flask-Migrate
-# Flask-MySQLdb
-# Flask-Principal
-# Flask-Script
-# # Flask-Security
+alchemy
+alembic
+aniso8601
+atomicwrites
+attrs
+Babel
+bcrypt
+bidict
+blinker
+certifi
+cffi
+chardet
+charset-normalizer
+click
+colorama
+cryptography
+cycler
+dnspython
+docutils
+email-validator
+Faker
+filelock
+Flask
+Flask-Admin
+Flask-BabelEx
+Flask-Bcrypt
+Flask-Caching
+Flask-HTTPAuth
+Flask-Login
+Flask-Mail
+flask-marshmallow
+Flask-Migrate
+Flask-MySQLdb
+Flask-Principal
+Flask-Script
+Flask-Security
 # https://github.com/jpvp13/CommunityBoard/tree/main/.venv/lib/python3.9/site-packages/flask_security
-# Flask-SocketIO
-# Flask-SQLAlchemy
-# Flask-SSLify
-# Flask-WTF
-# greenlet
-# idna
-# inflect
-# iniconfig
-# is-safe-url
-# itsdangerous
-# Jinja2
-# kiwisolver
-# lockfile
-# Mako
-# MarkupSafe
-# marshmallow
-# marshmallow-sqlalchemy
-# matplotlib
-# mysql-connector-python
-# mysqlclient
-# numpy
-# packaging
-# pandas
-# passlib
-# Pillow
-# pluggy
-# protobuf
-# py
-# pycparser
-# PyMySQL
-# pyparsing
-# pytest
-# python-daemon
-# python-dateutil
-# python-engineio
-# python-socketio
-# pytz
-# PyYAML
-# requests
-# six
-# speaklater
-# SQLAlchemy
-# text-unidecode
-# toml
-# urllib3
-# Werkzeug
-# WTForms
-# gunicorn
+Flask-SocketIO
+Flask-SQLAlchemy
+Flask-SSLify
+Flask-WTF
+greenlet
+idna
+inflect
+iniconfig
+is-safe-url
+itsdangerous
+Jinja2
+kiwisolver
+lockfile
+Mako
+MarkupSafe
+marshmallow
+marshmallow-sqlalchemy
+matplotlib
+mysql-connector-python
+mysqlclient
+numpy
+packaging
+pandas
+passlib
+Pillow
+pluggy
+protobuf
+py
+pycparser
+PyMySQL
+pyparsing
+pytest
+python-daemon
+python-dateutil
+python-engineio
+python-socketio
+pytz
+PyYAML
+requests
+six
+speaklater
+SQLAlchemy
+text-unidecode
+toml
+urllib3
+Werkzeug
+WTForms
+gunicorn

@@ -48,11 +48,11 @@ engine = create_engine('sqlite:///app.db', echo = True)
 # app.config ['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://jpvptest:123456789CSE@jpvptest.mysql.pythonanywhere-services.com/jpvptest$mysqlDatabase'
 # engine = create_engine('mysql+pymysql://jpvptest:123456789CSE@jpvptest.mysql.pythonanywhere-services.com/jpvptest$mysqlDatabase', echo = True)
 
-# app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:0000@localhost/newDB'
-# engine = create_engine('mysql+pymysql://root:0000@localhost/newDB', echo = True)
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:0000@localhost/newDB'
+engine = create_engine('mysql+pymysql://root:0000@localhost/newDB', echo = True)
 
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///app.db'
-engine = create_engine('sqlite:///app.db', echo = True)
+# app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///app.db'
+# engine = create_engine('sqlite:///app.db', echo = True)
 
 
 # app.config['FLASK_ADMIN_SWATCH'] = 'cerulean'

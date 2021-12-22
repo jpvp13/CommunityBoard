@@ -81,3 +81,4 @@ toml
 urllib3
 Werkzeug
 WTForms
+gunicorn

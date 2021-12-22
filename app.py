@@ -503,5 +503,5 @@ def clicked(message):
 #         ws.send(data)
 
 if __name__ == '__main__':
-    socketio.run(app, host='0.0.0.0',cors_allowed_origins="*")
+    socketio.run(app,cors_allowed_origins="*")
     # app.run()

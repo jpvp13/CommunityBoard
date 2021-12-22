@@ -1,79 +1,64 @@
-
-
-<!-- {% extends 'admin/master.html' %} -->
-<!-- {% from "security/_macros.html" import render_field_with_errors, render_field %}
-{% block body %}
-  {{ super() }}
-  <div class="container">
-    <div>
-      <h1>Login</h1>
-      <div class="well">
-        <form action="{{ url_for_security('loginPage') }}" method="POST"
-         name="login_user_form">
-          {{ login_user_form.hidden_tag() }}
-          {{ render_field_with_errors(login_user_form.email) }} -->
-          <!-- {{ render_field_with_errors(login_user_form.username) }} -->
-
-          <!-- {{ render_field_with_errors(login_user_form.password) }}
-          <!-- {{ render_field(login_user_form.next) }} -->
-          <!-- {{ render_field(login_user_form.submit, class="btn btn- --> -->
-             <!-- primary") }} -->
-        <!-- </form> -->
-        <!-- <p>
-            Not yet signed up? Please <a href="{{ 
-            url_for('security.register') }}">register for an
-            account</a>.
-        </p> -->
-      <!-- </div>
-    </div>
-  </div>
-{% endblock %} -->
-
-
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <title>Community Board</title>
-    <script src="templates/static/login.js"></script>
+  <meta charset="UTF-8">
+  <title>Community Board</title>
 
+  <link href="templates/static/CommunityBoard.css" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@2.5.0/fonts/remixicon.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Readex+Pro&display=swap" rel="stylesheet">
+
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.0/jquery.min.js"></script>
+  <script src="templates/static/welcomePage.js"></script>
 </head>
-<body>
-    <div class = "grid">
-        <div>
-            <header>
-               <h1>Community Board</h1>
-            </header>
-        </div>
-        <div>
-           <section>
-            <!-- <form action="/loginPage" method="POST"> -->
 
-            <form action="/login" method="POST" enctype="application/x-www-form-urlencoded">
-                <fieldset>
-                    <legend>Login</legend>
-                    <div>
-                        <label class="label">Username</label>
-    
-                    </div>
-                    <div>
-                        <input class="username-input" name="username" id="username">
-                    </div>
-    
-                    <div class="label">
-                        <label>Password</label>
-                    </div>
-                    <div>
-                        <input type="password" name="pass" class="pass-input" required>
-                    </div>
-                    <div>
-                        <button type="submit" >Log in </button>
-                    </div>
-                    <div class="error"></div>
-                </fieldset>
-            </form>
-           </section>
-        </div>
+<body class="login-body">
+  <div class="home-grid">
+    <div class="home-login-title">
+      <header class="login-header">
+        <h1>Community <br> Board</h1>
+      </header>
     </div>
+    <div>
+      <div class="merge-forms">
+        <form class="login-form" action="/login">
+          <!-- <form class="login-form" action="/path" method="POST" enctype="application/x-www-form-urlencoded"> -->
+          <fieldset>
+            <div class="login-legend">Login</div>
+            <label class="label">Username</label>
+            <input class="username-input input" name="username" id="username">
+            <label class="label">Password</label>
+            <input type="password" name="password" class="pass-input input">
+            <div class="grid-login-signup">
+              <div class="login-grid-1 login-button">
+                <button type="submit" formmethod="POST">Log in</button>
+
+              </div>
+            </div>
+
+            <div id="error-message">
+              {{ error }}
+            </div>
+          </fieldset>
+        </form>
+
+        <form class="signup-button-fix" action="/path" method="GET">
+          <fieldset class="bottom-fieldset-fix">
+            <div class="signup-button">
+              <p class="no-account">No account?</p><button type="submit" formmethod="PUT">Sign Up</button>
+            </div>
+
+          </fieldset>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  
 </body>
+
 </html>

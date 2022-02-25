@@ -1,4 +1,6 @@
 import json
+import os
+import psycopg2
 from logging import error
 from typing import Text
 from flask import Flask, redirect, url_for, request,render_template, json, flash, g
@@ -40,20 +42,19 @@ app.config['SECURITY_PASSWORD_SALT'] = 'CSE106'
 app.config['SECURITY_PASSWORD_HASH'] = 'pbkdf2_sha512'
 
 
-app.config ['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///app.db'
-engine = create_engine('sqlite:///app.db', echo = True)
-
-
 
 # app.config ['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://jpvptest:123456789CSE@jpvptest.mysql.pythonanywhere-services.com/jpvptest$mysqlDatabase'
 # engine = create_engine('mysql+pymysql://jpvptest:123456789CSE@jpvptest.mysql.pythonanywhere-services.com/jpvptest$mysqlDatabase', echo = True)
 
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:0000@localhost/newDB'
-engine = create_engine('mysql+pymysql://root:0000@localhost/newDB', echo = True)
+# app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:0000@localhost/newDB'
+# engine = create_engine('mysql+pymysql://root:0000@localhost/newDB', echo = True)
 
 # app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///app.db'
 # engine = create_engine('sqlite:///app.db', echo = True)
 
+app.config['SQLALCHEMY']
+engine = create_engine('postgresql+psycopg2://cnhmwgurqnfwzq:5603126b779eabed77c9a04c59ffe99b05f89bb0c05d75873757405c578cc0db@ec2-18-215-8-186.compute-1.amazonaws.com:5432/d1nu11uushpfvj')
+# not a protected password due to this just being a academic password
 
 # app.config['FLASK_ADMIN_SWATCH'] = 'cerulean'
 app.config['FLASK_ADMIN_SWATCH'] = 'sandstone'
@@ -503,5 +504,5 @@ def clicked(message):
 #         ws.send(data)
 
 if __name__ == '__main__':
-    socketio.run(app,cors_allowed_origins="*")
+    socketio.run(app, host='0.0.0.0',cors_allowed_origins="*")
     # app.run()

@@ -83,3 +83,5 @@ urllib3
 Werkzeug
 WTForms
 gunicorn
+os
+psycopg2
